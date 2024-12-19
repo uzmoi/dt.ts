@@ -157,7 +157,7 @@ export class DateTime implements DateTimeObject {
             return DateTime.fromMillis(source);
         }
         if (typeof source === "string") {
-            source = new Date(source);
+            return DateTime.fromString(source);
         }
         if (source instanceof Date) {
             return DateTime.fromNativeDate(source);
@@ -177,6 +177,9 @@ export class DateTime implements DateTimeObject {
             nativeDate.getUTCSeconds(),
             nativeDate.getUTCMilliseconds(),
         );
+    }
+    static fromString(this: void, string: string): DateTime {
+        return DateTime.fromNativeDate(new Date(string));
     }
     static fromMillis(this: void, ms: number): DateTime {
         return DateTime.fromObject({ millisecond: ms });
