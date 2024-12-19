@@ -38,7 +38,7 @@ export const weekOfYear = (
     date: DateObject,
     weekStart = weekStartDefault,
 ): number => {
-    const weekdayOffset = weekday({
+    const weekdayOffset = dayOfWeek({
         year: date.year,
         month: 1,
         day: 1 + daysInWeek - weekStart,
@@ -63,7 +63,7 @@ export const weekOfMonth = (
     date: DateObject,
     weekStart = weekStartDefault,
 ): WeekOfMonth => {
-    const weekdayOffset = weekday({
+    const weekdayOffset = dayOfWeek({
         year: date.year,
         month: date.month,
         day: 1 + daysInWeek - weekStart,
@@ -130,7 +130,7 @@ export const Weekday = {
 
 const weekStartDefault: Weekday = Weekday.Sun;
 
-export const weekday = (date: DateObject): Weekday => {
+export const dayOfWeek = (date: DateObject): Weekday => {
     const d = date.year + leapDays(date.year - 1) + dayOfYear(date);
     return (d % daysInWeek) as Weekday;
 };

@@ -1,6 +1,7 @@
 import { modulo } from "emnorst";
 import type { DurationObject } from "./duration";
 import {
+    dayOfWeek,
     dayOfYear,
     daysInMonth,
     daysInWeek,
@@ -10,7 +11,6 @@ import {
     minutesInHour,
     monthsInYear,
     secondsInMinute,
-    weekday,
     type Weekday,
 } from "./number";
 import {
@@ -223,7 +223,7 @@ export class DateTime implements DateTimeObject {
         return weekdayString(this, "long");
     }
     get weekday(): Weekday {
-        return weekday(this);
+        return dayOfWeek(this);
     }
     // cspell:disable-next-line
     get yearday(): number {
@@ -261,7 +261,7 @@ export class DateTime implements DateTimeObject {
     startOf(this: DateTime, key: DurationUnit): DateTime {
         const dt: Partial<DateTimeObject> = { millisecond: 0 };
         if (key === "week") {
-            dt.day = this.day - weekday(this);
+            dt.day = this.day - this.weekday;
             key = "day";
         }
         block: {

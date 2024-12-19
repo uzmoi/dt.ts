@@ -1,11 +1,12 @@
 import { describe, expect, test } from "@jest/globals";
 import { DateTime } from "./datetime";
 import {
+    Weekday,
+    dayOfWeek,
     dayOfYear,
     isLeapYear,
     weekOfMonth,
     weekOfYear,
-    weekday,
     weeksInMonth,
     weeksInYear,
 } from "./number";
@@ -15,15 +16,15 @@ test.each([
     { leap: false, weekDay: 6 },
     { leap: true, weekDay: 0 },
     { leap: true, weekDay: 6 },
-    { leap: true, weekDay: 5, weekStart: 1 as const },
-    { leap: true, weekDay: 0, weekStart: 1 as const },
+    { leap: true, weekDay: 5, weekStart: Weekday.Mon },
+    { leap: true, weekDay: 0, weekStart: Weekday.Mon },
 ])(
     "weeksInYear / leap=$leap, weekday=$weekDay, weekStart=$weekStart",
     ({ leap, weekDay, weekStart }) => {
         let year = 2000;
         while (
             isLeapYear(year) !== leap ||
-            weekday({ year, month: 1, day: 1 }) !== weekDay
+            dayOfWeek({ year, month: 1, day: 1 }) !== weekDay
         ) {
             year++;
         }
@@ -53,7 +54,7 @@ test.each([
     { year: 2023, month: 3, weeks: 5 },
     { year: 2023, month: 4, weeks: 6 },
     { year: 2023, month: 10, weeks: 5 },
-    { year: 2023, month: 10, weeks: 6, weekStart: 1 as const },
+    { year: 2023, month: 10, weeks: 6, weekStart: Weekday.Mon },
 ])(
     "weeksInMonth($year, $month, $weekStart) === $weeks",
     ({ year, month, weeks: expected, weekStart }) => {

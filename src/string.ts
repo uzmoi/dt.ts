@@ -1,5 +1,5 @@
 import type { DateObject, TimeObject } from "./datetime";
-import { weekday, type Weekday } from "./number";
+import { dayOfWeek, type Weekday } from "./number";
 import { formatInt } from "./string/util";
 
 export const dateToString = (
@@ -80,7 +80,7 @@ export const weekdayString: {
     (date: Weekday | DateObject, format?: "short"): WeekdayStringShort;
 } = (date: Weekday | DateObject, format): never => {
     const base =
-        weekDayStringArray[typeof date === "number" ? date : weekday(date)];
+        weekDayStringArray[typeof date === "number" ? date : dayOfWeek(date)];
     const result: WeekdayStringShort | WeekdayStringLong =
         format === "long"
             ? `${base}day`
