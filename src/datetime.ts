@@ -210,9 +210,11 @@ export class DateTime implements DateTimeObject {
         readonly second: number,
         readonly millisecond: number,
     ) {}
-    get inLeapYear(): boolean {
+
+    isInLeapYear(): boolean {
         return isLeapYear(this.year);
     }
+
     get monthStringShort(): MonthStringShort {
         return monthString(this.month);
     }
