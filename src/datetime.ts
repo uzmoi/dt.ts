@@ -225,12 +225,11 @@ export class DateTime implements DateTimeObject {
     get weekdayStringLong(): WeekdayStringLong {
         return weekdayString(this, "long");
     }
-    get weekday(): Weekday {
-        return dayOfWeek(this);
-    }
-    // cspell:disable-next-line
-    get yearday(): number {
+    get dayOfYear(): number {
         return dayOfYear(this);
+    }
+    get dayOfWeek(): Weekday {
+        return dayOfWeek(this);
     }
     /**
      * @returns "YYYY-MM-DDThh:mm:ss.nnn"
