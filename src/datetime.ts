@@ -227,12 +227,21 @@ export class DateTime implements DateTimeObject {
     get weekdayStringLong(): WeekdayStringLong {
         return weekdayString(this, "long");
     }
-    get dayOfYear(): number {
+
+    /**
+     * ordinal day
+     * @returns 1..366
+     */
+    dayOfYear(): number {
         return dayOfYear(this);
     }
-    get dayOfWeek(): Weekday {
+    /**
+     * week day
+     */
+    dayOfWeek(): Weekday {
         return dayOfWeek(this);
     }
+
     /**
      * @returns "YYYY-MM-DDThh:mm:ss.nnn"
      */
@@ -265,7 +274,7 @@ export class DateTime implements DateTimeObject {
     startOf(this: DateTime, key: DurationUnit): DateTime {
         const dt: Partial<DateTimeObject> = { millisecond: 0 };
         if (key === "week") {
-            dt.day = this.day - this.weekday;
+            dt.day = this.day - this.dayOfWeek();
             key = "day";
         }
         block: {
