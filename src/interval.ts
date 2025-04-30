@@ -2,12 +2,13 @@ import { assert } from "emnorst";
 import { DateTime, normalizeTime, type DateTimeLike } from "./datetime";
 import type { DurationObject } from "./duration";
 import {
-    daysInMonth,
-    hoursInDay,
-    millisInSecond,
-    minutesInHour,
-    monthsInYear,
-    secondsInMinute,
+  HOURS_IN_DAY,
+  MILLIS_IN_SECOND,
+  MINUTES_IN_HOUR,
+  MONTHS_IN_YEAR,
+  SECONDS_IN_MINUTE,
+  daysInMonth,
+  type Month,
 } from "./number";
 import { daysBetween } from "./relative";
 
@@ -48,13 +49,13 @@ export class Interval implements DurationObject {
     });
     let days = end.day - start.day + time.day;
     let months =
-      (end.year - start.year) * monthsInYear + end.month - start.month;
+      (end.year - start.year) * MONTHS_IN_YEAR + end.month - start.month;
 
     const daysInCurrentMonth = () => {
       const m = start.month + months;
       return daysInMonth(
-        start.year + Math.floor(m / monthsInYear),
-        m % monthsInYear || monthsInYear,
+        start.year + Math.floor(m / MONTHS_IN_YEAR),
+        (m % MONTHS_IN_YEAR || MONTHS_IN_YEAR) as Month,
       );
     };
 
@@ -66,8 +67,8 @@ export class Interval implements DurationObject {
       months--;
       days += daysInCurrentMonth();
     }
-    this.years        = Math.floor(months / monthsInYear); // prettier-ignore
-    this.months       = months % monthsInYear; // prettier-ignore
+    this.years        = Math.floor(months / MONTHS_IN_YEAR); // prettier-ignore
+    this.months       = months % MONTHS_IN_YEAR; // prettier-ignore
     this.days         = days; // prettier-ignore
     this.hours        = time.hour; // prettier-ignore
     this.minutes      = time.minute; // prettier-ignore
@@ -79,26 +80,26 @@ export class Interval implements DurationObject {
       return this.years;
     }
     if (key === "months") {
-      return this.years * monthsInYear + this.months;
+      return this.years * MONTHS_IN_YEAR + this.months;
     }
     const days = daysBetween(this.start, this.end);
     if (key === "days") {
       return days;
     }
-    const hours = days * hoursInDay + this.hours;
+    const hours = days * HOURS_IN_DAY + this.hours;
     if (key === "hours") {
       return hours;
     }
-    const minutes = hours * minutesInHour + this.minutes;
+    const minutes = hours * MINUTES_IN_HOUR + this.minutes;
     if (key === "minutes") {
       return minutes;
     }
-    const seconds = minutes * secondsInMinute + this.seconds;
+    const seconds = minutes * SECONDS_IN_MINUTE + this.seconds;
     if (key === "seconds") {
       return seconds;
     }
     if (key === "milliseconds") {
-      return seconds * millisInSecond + this.milliseconds;
+      return seconds * MILLIS_IN_SECOND + this.milliseconds;
     }
     assert.unreachable<typeof key>();
   }

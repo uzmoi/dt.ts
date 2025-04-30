@@ -1,4 +1,4 @@
-import { hoursInDay, minutesInHour } from "../number";
+import { HOURS_IN_DAY, MINUTES_IN_HOUR } from "../number";
 import { formatInt } from "./utils";
 
 export interface OffsetFormatOptions {
@@ -24,8 +24,8 @@ export const formatOffset = (
   const sign = isZero || offset > 0 ? "+" : "-";
   const absOffset = Math.abs(offset);
   const delim = options?.format === "basic" ? "" : ":";
-  const hour = formatInt(absOffset / minutesInHour, 2);
-  const minute = formatInt(absOffset % minutesInHour, 2);
+  const hour = formatInt(absOffset / MINUTES_IN_HOUR, 2);
+  const minute = formatInt(absOffset % MINUTES_IN_HOUR, 2);
 
   if (options?.allowOmitMinutes && minute === "00") {
     return sign + hour;
@@ -62,14 +62,14 @@ export const parseOffset = (
   }
 
   const hour = Number(matchResult[1]);
-  if (hour > hoursInDay) {
+  if (hour > HOURS_IN_DAY) {
     return null;
   }
 
   const minute = Number(matchResult[2] || "");
-  if (minute >= minutesInHour) {
+  if (minute >= MINUTES_IN_HOUR) {
     return null;
   }
 
-  return (offset[0] === "+" ? 1 : -1) * (hour * minutesInHour + minute);
+  return (offset[0] === "+" ? 1 : -1) * (hour * MINUTES_IN_HOUR + minute);
 };

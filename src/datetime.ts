@@ -1,16 +1,16 @@
 import { modulo } from "emnorst";
 import type { DurationObject } from "./duration";
 import {
+  DAYS_IN_WEEK,
+  HOURS_IN_DAY,
+  MILLIS_IN_SECOND,
+  MINUTES_IN_HOUR,
+  MONTHS_IN_YEAR,
+  SECONDS_IN_MINUTE,
   dayOfWeek,
   dayOfYear,
   daysInMonth,
-  daysInWeek,
-  hoursInDay,
   isLeapYear,
-  millisInSecond,
-  minutesInHour,
-  monthsInYear,
-  secondsInMinute,
   weekOfMonth,
   weekOfYear,
   type Month,
@@ -27,12 +27,12 @@ export type DateObject = {
 
 export const normalizeDate = (date: DateObject): DateObject => {
   let day = date.day;
-  let month = modulo(date.month, monthsInYear) || monthsInYear;
-  let year = date.year + Math.floor((date.month - 1) / monthsInYear);
+  let month = modulo(date.month, MONTHS_IN_YEAR) || MONTHS_IN_YEAR;
+  let year = date.year + Math.floor((date.month - 1) / MONTHS_IN_YEAR);
   while (day > daysInMonth(year, month as Month)) {
     day -= daysInMonth(year, month as Month);
     month++;
-    if (month > monthsInYear) {
+    if (month > MONTHS_IN_YEAR) {
       month = 1;
       year++;
     }
@@ -40,7 +40,7 @@ export const normalizeDate = (date: DateObject): DateObject => {
   while (day <= 0) {
     month--;
     if (month < 1) {
-      month = monthsInYear;
+      month = MONTHS_IN_YEAR;
       year--;
     }
     day += daysInMonth(year, month as Month);
@@ -59,15 +59,15 @@ export const normalizeTime = (
   time: TimeObject,
 ): TimeObject & { day: number } => {
   const millisecond = time.millisecond;
-  const second = time.second + Math.floor(millisecond / millisInSecond);
-  const minute = time.minute + Math.floor(second / secondsInMinute);
-  const hour = time.hour + Math.floor(minute / minutesInHour);
+  const second = time.second + Math.floor(millisecond / MILLIS_IN_SECOND);
+  const minute = time.minute + Math.floor(second / SECONDS_IN_MINUTE);
+  const hour = time.hour + Math.floor(minute / MINUTES_IN_HOUR);
   return {
-    day: Math.floor(hour / hoursInDay),
-    hour: modulo(hour, hoursInDay),
-    minute: modulo(minute, minutesInHour),
-    second: modulo(second, secondsInMinute),
-    millisecond: modulo(millisecond, millisInSecond),
+    day: Math.floor(hour / HOURS_IN_DAY),
+    hour: modulo(hour, HOURS_IN_DAY),
+    minute: modulo(minute, MINUTES_IN_HOUR),
+    second: modulo(second, SECONDS_IN_MINUTE),
+    millisecond: modulo(millisecond, MILLIS_IN_SECOND),
   };
 };
 
@@ -289,7 +289,7 @@ export class DateTime implements DateTimeObject {
   endOf(this: DateTime, key: DurationUnit): DateTime {
     const start = this.startOf(key);
     if (key === "week") {
-      return start.plus({ days: daysInWeek, milliseconds: -1 });
+      return start.plus({ days: DAYS_IN_WEEK, milliseconds: -1 });
     } else {
       return start.plus({ [key + "s"]: 1, milliseconds: -1 });
     }

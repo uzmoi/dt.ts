@@ -14,7 +14,7 @@ export const leapDays = (year: number): number => {
 
 // Month
 
-export const monthsInYear = 12;
+export const MONTHS_IN_YEAR = 12;
 
 // Week
 
@@ -24,7 +24,10 @@ export const weeksInYear = (
   year: number,
   weekStart = weekStartDefault,
 ): WeeksInYear => {
-  const weekday = modulo(year + leapDays(year - 1) - weekStart + 1, daysInWeek);
+  const weekday = modulo(
+    year + leapDays(year - 1) - weekStart + 1,
+    DAYS_IN_WEEK,
+  );
   return weekday === 0 && isLeapYear(year) ? 53 : 52;
 };
 
@@ -38,9 +41,9 @@ export const weekOfYear = (
   const weekdayOffset = dayOfWeek({
     year: date.year,
     month: 1,
-    day: 1 + daysInWeek - weekStart,
+    day: 1 + DAYS_IN_WEEK - weekStart,
   });
-  return Math.floor((weekdayOffset + dayOfYear(date)) / daysInWeek);
+  return Math.floor((weekdayOffset + dayOfYear(date)) / DAYS_IN_WEEK);
 };
 
 export type WeeksInMonth = 4 | 5 | 6;
@@ -65,22 +68,22 @@ export const weekOfMonth = (
   const weekdayOffset = dayOfWeek({
     year: date.year,
     month: date.month,
-    day: 1 + daysInWeek - weekStart,
+    day: 1 + DAYS_IN_WEEK - weekStart,
   });
-  return Math.ceil((weekdayOffset + date.day) / daysInWeek) as WeekOfMonth;
+  return Math.ceil((weekdayOffset + date.day) / DAYS_IN_WEEK) as WeekOfMonth;
 };
 
 // Day
 
 export type DaysInYear = 365 | 366;
 
-export const daysInYearWithoutLeapDay = 365;
+export const DAYS_IN_YEAR_WITHOUT_LEAP_DAY = 365;
 
-// daysInYearWithoutLeapDay + 1/4 - 1/100 + 1/400
-export const daysInYearAverage = 365.2425;
+// DAYS_IN_YEAR_WITHOUT_LEAP_DAY + 1/4 - 1/100 + 1/400
+export const DAYS_IN_YEAR_AVERAGE = 365.2425;
 
 export const daysInYear = (year: number): DaysInYear => {
-  return (daysInYearWithoutLeapDay + +isLeapYear(year)) as DaysInYear;
+  return (DAYS_IN_YEAR_WITHOUT_LEAP_DAY + +isLeapYear(year)) as DaysInYear;
 };
 
 export const dayOfYear = (date: DateObject): number => {
@@ -89,11 +92,11 @@ export const dayOfYear = (date: DateObject): number => {
   //   2 ならば 14
   //   それ以外ならば date.month
   // それに + 1 する
-  const m = ((date.month + 9) % monthsInYear) + 4;
+  const m = ((date.month + 9) % MONTHS_IN_YEAR) + 4;
   // fairfieldの公式
   // -64 === -122 + 31(1月の日数) + 28(2月の日数) - 1(dayが1から始まるため、1月1日を0とする調整)
   const dayOfYearWithoutLeapDay =
-    ((((306 * m) / 10) | 0) - 64 + date.day) % daysInYearWithoutLeapDay;
+    ((((306 * m) / 10) | 0) - 64 + date.day) % DAYS_IN_YEAR_WITHOUT_LEAP_DAY;
 
   const leapDay = +(date.month > 2 && isLeapYear(date.year));
   return dayOfYearWithoutLeapDay + leapDay;
@@ -102,7 +105,7 @@ export const dayOfYear = (date: DateObject): number => {
 export type DaysInMonth = 28 | 29 | 30 | 31;
 
 // daysInYearAverage / 12
-export const daysInMonthAverage = 30.436875;
+export const DAYS_IN_MONTH_AVERAGE = 30.436875;
 
 const daysInMonthArray = [
   31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
@@ -113,7 +116,7 @@ export const daysInMonth = (year: number, month: Month): DaysInMonth => {
   return (daysInMonthArray[month - 1] + leapDay) as DaysInMonth;
 };
 
-export const daysInWeek = 7;
+export const DAYS_IN_WEEK = 7;
 
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -131,12 +134,12 @@ const weekStartDefault: Weekday = Weekday.Sun;
 
 export const dayOfWeek = (date: DateObject): Weekday => {
   const d = date.year + leapDays(date.year - 1) + dayOfYear(date);
-  return (d % daysInWeek) as Weekday;
+  return (d % DAYS_IN_WEEK) as Weekday;
 };
 
 // Time
 
-export const hoursInDay = 24;
-export const minutesInHour = 60;
-export const secondsInMinute = 60;
-export const millisInSecond = 1000;
+export const HOURS_IN_DAY = 24;
+export const MINUTES_IN_HOUR = 60;
+export const SECONDS_IN_MINUTE = 60;
+export const MILLIS_IN_SECOND = 1000;

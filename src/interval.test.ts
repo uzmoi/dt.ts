@@ -3,13 +3,14 @@ import { DateTime } from "./datetime";
 import type { DurationObject } from "./duration";
 import { Interval } from "./interval";
 import {
+  DAYS_IN_YEAR_WITHOUT_LEAP_DAY,
+  HOURS_IN_DAY,
+  MILLIS_IN_SECOND,
+  MINUTES_IN_HOUR,
+  MONTHS_IN_YEAR,
+  SECONDS_IN_MINUTE,
   daysInMonth,
-  daysInYearWithoutLeapDay,
-  hoursInDay,
-  millisInSecond,
-  minutesInHour,
-  monthsInYear,
-  secondsInMinute,
+  type Month,
 } from "./number";
 
 describe("Interval", () => {
@@ -41,19 +42,19 @@ describe("Interval", () => {
   });
   test(".to('months')", () => {
     const interval = Interval.after(start, { years: 1, months: 2 });
-    expect(interval.to("months")).toBe(1 * monthsInYear + 2);
+    expect(interval.to("months")).toBe(1 * MONTHS_IN_YEAR + 2);
   });
   test(".to('milliseconds')", () => {
     // prettier-ignore
-    const expectedDays = plus.years * daysInYearWithoutLeapDay
-      + daysInMonth(start.year + plus.years, start.month + 1)
-      + daysInMonth(start.year + plus.years + 1, (start.month + 2) % monthsInYear)
+    const expectedDays = plus.years * DAYS_IN_YEAR_WITHOUT_LEAP_DAY
+      + daysInMonth(start.year + plus.years, start.month + 1 as Month)
+      + daysInMonth(start.year + plus.years + 1, (start.month + 2) % MONTHS_IN_YEAR as Month)
       + plus.days;
     const expected = [
-      [hoursInDay, plus.hours],
-      [minutesInHour, plus.minutes],
-      [secondsInMinute, plus.seconds],
-      [millisInSecond, plus.milliseconds],
+      [HOURS_IN_DAY, plus.hours],
+      [MINUTES_IN_HOUR, plus.minutes],
+      [SECONDS_IN_MINUTE, plus.seconds],
+      [MILLIS_IN_SECOND, plus.milliseconds],
     ].reduce((prev, [rate, value]) => prev * rate + value, expectedDays);
     const interval = Interval.after(start, plus);
     expect(interval.to("milliseconds")).toBe(expected);
