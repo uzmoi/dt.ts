@@ -1,6 +1,6 @@
 import type { DateObject, TimeObject } from "./datetime";
 import { dayOfWeek, type Weekday } from "./number";
-import { formatInt } from "./string/util";
+import { formatInt } from "./string/utils";
 
 export const dateToString = (
     date: DateObject,

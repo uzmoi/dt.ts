@@ -1,5 +1,5 @@
 import { hoursInDay, minutesInHour } from "../number";
-import { formatInt } from "./util";
+import { formatInt } from "./utils";
 
 export interface OffsetFormatOptions {
     neverUseZ?: boolean;
