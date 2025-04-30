@@ -16,16 +16,7 @@ import {
   type WeekOfMonth,
   type Weekday,
 } from "./number";
-import {
-  dateToString,
-  monthString,
-  timeToString,
-  weekdayString,
-  type MonthStringLong,
-  type MonthStringShort,
-  type WeekdayStringLong,
-  type WeekdayStringShort,
-} from "./string";
+import { dateToString, timeToString } from "./string";
 
 export type DateObject = {
   year: number;
@@ -217,19 +208,6 @@ export class DateTime implements DateTimeObject {
 
   isInLeapYear(): boolean {
     return isLeapYear(this.year);
-  }
-
-  get monthStringShort(): MonthStringShort {
-    return monthString(this.month);
-  }
-  get monthStringLong(): MonthStringLong {
-    return monthString(this.month, "long");
-  }
-  get weekdayStringShort(): WeekdayStringShort {
-    return weekdayString(this);
-  }
-  get weekdayStringLong(): WeekdayStringLong {
-    return weekdayString(this, "long");
   }
 
   /**
