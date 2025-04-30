@@ -1,6 +1,6 @@
 import { modulo } from "emnorst";
 import type { DateObject } from "./datetime";
-import type { WeekdayStringShort } from "./string";
+import type { WeekdayStringShort } from "./string/week";
 
 // Leap
 

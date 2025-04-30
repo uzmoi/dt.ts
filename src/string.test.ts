@@ -1,7 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import type { DateObject, TimeObject } from "./datetime";
-import { Weekday } from "./number";
-import { dateToString, timeToString, weekdayString } from "./string";
+import { dateToString, timeToString } from "./string";
 
 describe("dateToString", () => {
   test("basic", () => {
@@ -41,8 +40,4 @@ describe("timeToString", () => {
     };
     expect(timeToString(time)).toBe("16:08:04.002");
   });
-});
-
-test("weekdayString", () => {
-  expect(weekdayString(Weekday.Mon)).toBe("Mon");
 });
