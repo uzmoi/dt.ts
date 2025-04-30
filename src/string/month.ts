@@ -1,3 +1,4 @@
+import type { Month } from "../number";
 import type { Head3 } from "./utils";
 
 const monthStringArray = [
@@ -18,10 +19,10 @@ const monthStringArray = [
 export type MonthStringLong = (typeof monthStringArray)[number];
 export type MonthStringShort = Head3<MonthStringLong>;
 
-export const monthStringLong = (month: number): MonthStringLong => {
+export const monthStringLong = (month: Month): MonthStringLong => {
   return monthStringArray[month - 1];
 };
 
-export const monthStringShort = (month: number): MonthStringShort => {
+export const monthStringShort = (month: Month): MonthStringShort => {
   return monthStringArray[month - 1].slice(0, 3) as MonthStringShort;
 };

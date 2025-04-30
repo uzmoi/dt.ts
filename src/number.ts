@@ -45,9 +45,11 @@ export const weekOfYear = (
 
 export type WeeksInMonth = 4 | 5 | 6;
 
+export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
 export const weeksInMonth = (
   year: number,
-  month: number,
+  month: Month,
   weekStart?: Weekday,
 ): WeeksInMonth => {
   const day = daysInMonth(year, month);
@@ -106,7 +108,7 @@ const daysInMonthArray = [
   31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
 ] as const satisfies readonly DaysInMonth[];
 
-export const daysInMonth = (year: number, month: number): DaysInMonth => {
+export const daysInMonth = (year: number, month: Month): DaysInMonth => {
   const leapDay = +(month === 2 && isLeapYear(year));
   return (daysInMonthArray[month - 1] + leapDay) as DaysInMonth;
 };

@@ -55,7 +55,7 @@ test.each([
   { year: 2023, month: 4, weeks: 6 },
   { year: 2023, month: 10, weeks: 5 },
   { year: 2023, month: 10, weeks: 6, weekStart: Weekday.Mon },
-])(
+] as const)(
   "weeksInMonth($year, $month, $weekStart) === $weeks",
   ({ year, month, weeks: expected, weekStart }) => {
     expect(weeksInMonth(year, month, weekStart)).toBe(expected);

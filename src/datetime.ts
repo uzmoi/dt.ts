@@ -13,6 +13,7 @@ import {
   secondsInMinute,
   weekOfMonth,
   weekOfYear,
+  type Month,
   type WeekOfMonth,
   type Weekday,
 } from "./number";
@@ -28,8 +29,8 @@ export const normalizeDate = (date: DateObject): DateObject => {
   let day = date.day;
   let month = modulo(date.month, monthsInYear) || monthsInYear;
   let year = date.year + Math.floor((date.month - 1) / monthsInYear);
-  while (day > daysInMonth(year, month)) {
-    day -= daysInMonth(year, month);
+  while (day > daysInMonth(year, month as Month)) {
+    day -= daysInMonth(year, month as Month);
     month++;
     if (month > monthsInYear) {
       month = 1;
@@ -42,7 +43,7 @@ export const normalizeDate = (date: DateObject): DateObject => {
       month = monthsInYear;
       year--;
     }
-    day += daysInMonth(year, month);
+    day += daysInMonth(year, month as Month);
   }
   return { day, month, year };
 };
