@@ -11,6 +11,9 @@ import {
   minutesInHour,
   monthsInYear,
   secondsInMinute,
+  weekOfMonth,
+  weekOfYear,
+  type WeekOfMonth,
   type Weekday,
 } from "./number";
 import {
@@ -229,6 +232,18 @@ export class DateTime implements DateTimeObject {
     return weekdayString(this, "long");
   }
 
+  /**
+   * @returns 1..53
+   */
+  weekOfYear(weekStart: Weekday): number {
+    return weekOfYear(this, weekStart);
+  }
+  /**
+   * @returns 1..6
+   */
+  weekOfMonth(weekStart: Weekday): WeekOfMonth {
+    return weekOfMonth(this, weekStart);
+  }
   /**
    * ordinal day
    * @returns 1..366
