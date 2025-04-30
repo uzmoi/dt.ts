@@ -12,7 +12,7 @@ import {
 } from "./number";
 import { daysBetween } from "./relative";
 
-export class Interval implements DurationObject {
+export class Interval {
   static from(this: void, start: DateTimeLike, end: DateTimeLike): Interval {
     return new Interval(DateTime.from(start), DateTime.from(end));
   }
@@ -32,14 +32,11 @@ export class Interval implements DurationObject {
     const startDt = DateTime.from(start);
     return new Interval(startDt, startDt.plus(dur));
   }
-  readonly years: number;
-  readonly months: number;
-  readonly days: number;
-  readonly hours: number;
-  readonly minutes: number;
-  readonly seconds: number;
-  readonly milliseconds: number;
-  constructor(readonly start: DateTime, readonly end: DateTime) {
+
+  constructor(readonly start: DateTime, readonly end: DateTime) {}
+
+  toDuration(): DurationObject {
+    const { start, end } = this;
     // prettier-ignore
     const time = normalizeTime({
       hour:        end.hour        - start.hour,
@@ -67,13 +64,16 @@ export class Interval implements DurationObject {
       months--;
       days += daysInCurrentMonth();
     }
-    this.years        = Math.floor(months / MONTHS_IN_YEAR); // prettier-ignore
-    this.months       = months % MONTHS_IN_YEAR; // prettier-ignore
-    this.days         = days; // prettier-ignore
-    this.hours        = time.hour; // prettier-ignore
-    this.minutes      = time.minute; // prettier-ignore
-    this.seconds      = time.second; // prettier-ignore
-    this.milliseconds = time.millisecond; // prettier-ignore
+
+    return {
+      years:        Math.floor(months / MONTHS_IN_YEAR), // prettier-ignore
+      months:       months % MONTHS_IN_YEAR, // prettier-ignore
+      days:         days, // prettier-ignore
+      hours:        time.hour, // prettier-ignore
+      minutes:      time.minute, // prettier-ignore
+      seconds:      time.second, // prettier-ignore
+      milliseconds: time.millisecond, // prettier-ignore
+    };
   }
   to(this: Interval, key: keyof DurationObject): number {
     if (key === "years") {
