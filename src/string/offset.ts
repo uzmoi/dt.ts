@@ -1,13 +1,13 @@
 import { hoursInDay, minutesInHour } from "../number";
 import { formatInt } from "./util";
 
-export type OffsetFormatOptions = {
+export interface OffsetFormatOptions {
     neverUseZ?: boolean;
     allowOmitMinutes?: boolean;
     ignoreNegativeZero?: boolean;
     /** @default "extended" */
     format?: "extended" | "basic";
-};
+}
 
 export const formatOffset = (
     offset: number,
@@ -34,11 +34,11 @@ export const formatOffset = (
     return sign + hour + delim + minute;
 };
 
-export type OffsetParseOptions = {
+export interface OffsetParseOptions {
     allowLowerCase?: boolean;
     alwaysFull?: boolean;
     alwaysExtended?: boolean;
-};
+}
 
 const OffsetRegex = /^[+-](\d\d)(?::?(\d\d))?$/;
 
