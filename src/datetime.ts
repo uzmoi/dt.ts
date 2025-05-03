@@ -1,23 +1,25 @@
 import { modulo } from "emnorst";
-import type { DurationObject } from "./duration";
+import type { DurationObject } from "./duration.ts";
 import {
-  DAYS_IN_WEEK,
   HOURS_IN_DAY,
   MILLIS_IN_SECOND,
   MINUTES_IN_HOUR,
   MONTHS_IN_YEAR,
   SECONDS_IN_MINUTE,
-  dayOfWeek,
   dayOfYear,
   daysInMonth,
   isLeapYear,
+  type Month,
+} from "./number.ts";
+import { dateToString, timeToString } from "./string.ts";
+import {
+  DAYS_IN_WEEK,
+  dayOfWeek,
   weekOfMonth,
   weekOfYear,
-  type Month,
   type WeekOfMonth,
   type Weekday,
-} from "./number";
-import { dateToString, timeToString } from "./string";
+} from "./week.ts";
 
 export type DateObject = {
   year: number;
