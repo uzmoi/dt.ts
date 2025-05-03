@@ -112,8 +112,7 @@ const daysInMonthArray = [
 ] as const satisfies readonly DaysInMonth[];
 
 export const daysInMonth = (year: number, month: Month): DaysInMonth => {
-  const leapDay = +(month === 2 && isLeapYear(year));
-  return (daysInMonthArray[month - 1] + leapDay) as DaysInMonth;
+  return month === 2 && isLeapYear(year) ? 29 : daysInMonthArray[month - 1];
 };
 
 export const DAYS_IN_WEEK = 7;
