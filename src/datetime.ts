@@ -11,7 +11,8 @@ import {
   isLeapYear,
   type Month,
 } from "./number.ts";
-import { dateToString, timeToString } from "./string.ts";
+import { dateToString } from "./string.ts";
+import { TimeObject, timeToString } from "./time.ts";
 import {
   DAYS_IN_WEEK,
   dayOfWeek,
@@ -48,13 +49,6 @@ export const normalizeDate = (date: DateObject): DateObject => {
     day += daysInMonth(year, month as Month);
   }
   return { day, month, year };
-};
-
-export type TimeObject = {
-  hour: number;
-  minute: number;
-  second: number;
-  millisecond: number;
 };
 
 export const normalizeTime = (

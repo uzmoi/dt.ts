@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import type { DateObject, TimeObject } from "./datetime";
-import { dateToString, timeToString } from "./string";
+import type { DateObject } from "./datetime.ts";
+import { dateToString } from "./string.ts";
 
 describe("dateToString", () => {
   test("basic", () => {
@@ -18,26 +18,5 @@ describe("dateToString", () => {
       day: 4,
     };
     expect(dateToString(date)).toBe("0095-08-04");
-  });
-});
-
-describe("timeToString", () => {
-  test("basic", () => {
-    const time: TimeObject = {
-      hour: 16,
-      minute: 8,
-      second: 4,
-      millisecond: 2,
-    };
-    expect(timeToString(time, "basic")).toBe("160804.002");
-  });
-  test("extended", () => {
-    const time: TimeObject = {
-      hour: 16,
-      minute: 8,
-      second: 4,
-      millisecond: 2,
-    };
-    expect(timeToString(time)).toBe("16:08:04.002");
   });
 });

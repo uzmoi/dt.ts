@@ -57,10 +57,3 @@ const daysInMonthArray = [
 export const daysInMonth = (year: number, month: Month): DaysInMonth => {
   return month === 2 && isLeapYear(year) ? 29 : daysInMonthArray[month - 1];
 };
-
-// Time
-
-export const HOURS_IN_DAY = 24;
-export const MINUTES_IN_HOUR = 60;
-export const SECONDS_IN_MINUTE = 60;
-export const MILLIS_IN_SECOND = 1000;

@@ -1,14 +1,13 @@
-import type { DateTimeObject } from "../datetime";
+import type { DateTimeObject } from "../datetime.ts";
+import { MONTHS_IN_YEAR, daysInMonth, type Month } from "../number.ts";
+import { dateToString } from "../string.ts";
 import {
   HOURS_IN_DAY,
   MINUTES_IN_HOUR,
-  MONTHS_IN_YEAR,
   SECONDS_IN_MINUTE,
-  daysInMonth,
-  type Month,
-} from "../number";
-import { dateToString, timeToString } from "../string";
-import { formatOffset, parseOffset } from "./offset";
+  timeToString,
+} from "../time.ts";
+import { formatOffset, parseOffset } from "./offset.ts";
 
 // https://www.rfc-editor.org/info/rfc3339
 

@@ -1,5 +1,5 @@
-import { HOURS_IN_DAY, MINUTES_IN_HOUR } from "../number";
-import { formatInt } from "./utils";
+import { HOURS_IN_DAY, MINUTES_IN_HOUR } from "../time.ts";
+import { formatInt } from "./utils.ts";
 
 export interface OffsetFormatOptions {
   neverUseZ?: boolean;
