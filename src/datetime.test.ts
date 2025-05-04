@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { DateTime } from "./datetime";
-import { isLeapYear } from "./number";
+import { DateTime } from "./datetime.ts";
+import { isLeapYear } from "./number.ts";
 
 describe("DateTime", () => {
   test("from DateTime class", () => {
@@ -29,23 +29,6 @@ describe("DateTime", () => {
     const dt = DateTime.from("2022-11-07T01:23:45.678Z");
     expect(JSON.stringify(dt)).toBe(JSON.stringify("2022-11-07T01:23:45.678"));
   });
-  test("plus", () => {
-    const dt = DateTime.from([2022]).plus({
-      months: 10,
-      days: 6,
-      hours: 1,
-      minutes: 23,
-      seconds: 45,
-      milliseconds: 678,
-    });
-    expect(dt).toEqual(DateTime.from("2022-11-07T01:23:45.678Z"));
-  });
-  test("plus order", () => {
-    const base = DateTime.from([2022]);
-    const dt = base.plus({ years: 2 }).plus({ days: 60 });
-    expect(isLeapYear(dt.year)).toBe(true);
-    expect(base.plus({ years: 2, days: 60 })).toEqual(dt);
-  });
   test.each([
     ["year" as const,   "2022-01-01T00:00:00.000Z"], // prettier-ignore
     ["month" as const,  "2022-11-01T00:00:00.000Z"], // prettier-ignore
@@ -69,5 +52,34 @@ describe("DateTime", () => {
   ])(".endOf('%s')", (key, expected) => {
     const base = DateTime.from("2022-11-07T01:23:45.678Z");
     expect(base.endOf(key)).toStrictEqual(DateTime.from(expected));
+  });
+});
+
+describe("plus", () => {
+  test("plus", () => {
+    const dt = DateTime.from([2022]).plus({
+      months: 10,
+      days: 6,
+      hours: 1,
+      minutes: 23,
+      seconds: 45,
+      milliseconds: 678,
+    });
+
+    expect(dt).toEqual(DateTime.from("2022-11-07T01:23:45.678Z"));
+  });
+
+  test("うるう日の1年後", () => {
+    const dt = DateTime.from([2020, 2, 29]);
+    expect(dt.isInLeapYear()).toBe(true);
+    expect(dt.plus({ years: 1 }).toString()).toBe("2021-03-01T00:00:00.000");
+  });
+
+  test("plus order", () => {
+    const base = DateTime.from([2022]);
+    expect(isLeapYear(2024)).toBe(true);
+    expect(base.plus({ years: 2, days: 60 })).toEqual(
+      base.plus({ years: 2 }).plus({ days: 60 }),
+    );
   });
 });
