@@ -30,8 +30,7 @@ export const timeToString = (
     formatInt(time.minute, 2) +
     delim +
     formatInt(time.second, 2) +
-    "." +
-    formatInt(time.millisecond, 3)
+    String(time.millisecond / MILLISECONDS_IN_SECOND).slice(1)
   );
 };
 

@@ -11,6 +11,16 @@ describe("toString", () => {
     const time = new Time(2, 4, 8, 16);
     expect(time.toString()).toBe("02:04:08.016");
   });
+
+  test("omit millisecond if zero", () => {
+    const time = new Time();
+    expect(time.toString()).toBe("00:00:00");
+  });
+
+  test("no trailing zero", () => {
+    const time = new Time(0, 0, 0, 100);
+    expect(time.toString()).toBe("00:00:00.1");
+  });
 });
 
 describe("with", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { formatRFC3339, parseRFC3339 } from "./rfc3339";
+import { formatRFC3339, parseRFC3339 } from "./rfc3339.ts";
 
 describe("parse", () => {
   test("valid", () => {
@@ -58,6 +58,6 @@ describe("format", () => {
         millisecond: 600,
         offset: 0,
       }),
-    ).toBe("2025-01-02T03:04:05.600Z");
+    ).toBe("2025-01-02T03:04:05.6Z");
   });
 });
