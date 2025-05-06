@@ -1,6 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
 import { Time } from "./time.ts";
 
+test("parse", () => {
+  const time = Time.parse("02:04:08.016");
+  expect(time?.toString()).toStrictEqual("02:04:08.016");
+});
+
 describe("toString", () => {
   test("basic", () => {
     const time = new Time(2, 4, 8, 16);
