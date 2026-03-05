@@ -2,13 +2,13 @@ import { modulo } from "emnorst";
 import {
   dayOfYear,
   daysInMonth,
+  formatDate,
   isLeapYear,
   MONTHS_IN_YEAR,
   type Month,
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
-import { dateToString } from "./string.ts";
-import { type TimeObject, timeToString } from "./time.ts";
+import { formatTime, type TimeObject } from "./time.ts";
 import {
   DAYS_IN_WEEK,
   dayOfWeek,
@@ -233,7 +233,7 @@ export class DateTime implements DateTimeObject {
    * @returns "YYYY-MM-DDThh:mm:ss.nnn"
    */
   toString(this: this): string {
-    return dateToString(this) + "T" + timeToString(this);
+    return `${formatDate(this)}T${formatTime(this)}`;
   }
   toJSON(this: this): string {
     return this.toString();

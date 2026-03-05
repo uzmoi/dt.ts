@@ -1,3 +1,4 @@
+import { formatInt } from "./string/utils.ts";
 import type { Weekday, WeekOfMonth } from "./week.ts";
 
 export interface CalendarDateObject {
@@ -32,6 +33,17 @@ export type DateObject =
   | OrdinalDateObject
   | CalendarWeekDateObject
   | OrdinalWeekDateObject;
+
+export const formatDate = (
+  date: CalendarDateObject,
+  format?: "extended" | "basic",
+): string => {
+  return [
+    formatInt(date.year, 4),
+    formatInt(date.month, 2),
+    formatInt(date.day, 2),
+  ].join(format === "basic" ? "" : "-");
+};
 
 // Leap
 

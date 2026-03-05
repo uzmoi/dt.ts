@@ -1,11 +1,15 @@
-import { daysInMonth, MONTHS_IN_YEAR, type Month } from "../date.ts";
-import type { DateTimeObject } from "../datetime.ts";
-import { dateToString } from "../string.ts";
 import {
+  daysInMonth,
+  formatDate,
+  MONTHS_IN_YEAR,
+  type Month,
+} from "../date.ts";
+import type { DateTimeObject } from "../datetime.ts";
+import {
+  formatTime,
   HOURS_IN_DAY,
   MINUTES_IN_HOUR,
   SECONDS_IN_MINUTE,
-  timeToString,
 } from "../time.ts";
 import { formatOffset, parseOffset } from "./offset.ts";
 
@@ -56,5 +60,5 @@ export const formatRFC3339 = (
   options?: RFC3339FormatOptions,
 ): string => {
   const delim = options?.deliminator ?? "T";
-  return dateToString(dt) + delim + timeToString(dt) + formatOffset(dt.offset);
+  return formatDate(dt) + delim + formatTime(dt) + formatOffset(dt.offset);
 };

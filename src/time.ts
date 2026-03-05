@@ -18,20 +18,16 @@ export const timeToMilliseconds = (time: TimeObject): number => {
   return seconds * MILLISECONDS_IN_SECOND + time.millisecond;
 };
 
-export const timeToString = (
+export const formatTime = (
   time: TimeObject,
   format?: "extended" | "basic",
 ): string => {
-  const delim = format === "basic" ? "" : ":";
-
-  return (
-    formatInt(time.hour, 2) +
-    delim +
-    formatInt(time.minute, 2) +
-    delim +
+  return [
+    formatInt(time.hour, 2),
+    formatInt(time.minute, 2),
     formatInt(time.second, 2) +
-    String(time.millisecond / MILLISECONDS_IN_SECOND).slice(1)
-  );
+      String(time.millisecond / MILLISECONDS_IN_SECOND).slice(1),
+  ].join(format === "basic" ? "" : ":");
 };
 
 const timeRe = /^(\d\d):(\d\d):(\d\d)(?:\.(\d+))?$/;
@@ -60,6 +56,6 @@ export class Time implements TimeObject {
   }
 
   toString(format?: "extended" | "basic"): string {
-    return timeToString(this, format);
+    return formatTime(this, format);
   }
 }
