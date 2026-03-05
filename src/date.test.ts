@@ -1,5 +1,5 @@
-import { expect, test } from "@jest/globals";
-import { dayOfYear } from "./date.js";
+import { expect, test } from "vitest";
+import { dayOfYear } from "./date.ts";
 import { DateTime } from "./datetime.ts";
 
 test.each(Array.from({ length: 12 }, (_, i) => DateTime.from([2022, i + 1])))(

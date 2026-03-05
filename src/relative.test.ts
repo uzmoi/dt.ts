@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import type { DateObject } from "./datetime";
 import { daysInMonth, daysInYear } from "./number";
 import { daysBetween } from "./relative";

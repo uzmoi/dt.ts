@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import type { DateObject } from "./datetime.ts";
 import { dateToString } from "./string.ts";
 

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import { formatRFC3339, parseRFC3339 } from "./rfc3339.ts";
 
 describe("parse", () => {

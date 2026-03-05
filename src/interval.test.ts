@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import { DateTime } from "./datetime";
 import type { DurationObject } from "./duration";
 import { Interval } from "./interval";
