@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsdown",
     "test": "vitest",
-    "fmt": "prettier -c **/*.ts"
+    "fmt": "biome format"
   },
   "repository": {
     "type": "git",
@@ -40,8 +40,8 @@
   },
   "homepage": "https://github.com/uzmoi/datetime.js#readme",
   "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
     "@vitest/coverage-v8": "^4.0.18",
-    "prettier": "^2.8.7",
     "tsdown": "^0.20.3",
     "typescript": "^5.0.4",
     "vitest": "^4.0.18"
