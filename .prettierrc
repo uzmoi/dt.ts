@@ -1,5 +1,4 @@
 {
-    "tabWidth": 4,
-    "trailingComma": "all",
-    "arrowParens": "avoid"
+  "trailingComma": "all",
+  "arrowParens": "avoid"
 }
