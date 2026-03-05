@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
+import { dayOfYear } from "./date.js";
 import { DateTime } from "./datetime.ts";
-import { dayOfYear } from "./number.ts";
 
 test.each(Array.from({ length: 12 }, (_, i) => DateTime.from([2022, i + 1])))(
   "dayOfYear('%s')",
