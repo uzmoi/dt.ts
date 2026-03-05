@@ -1,4 +1,37 @@
-import type { DateObject } from "./datetime.ts";
+import type { Weekday, WeekOfMonth } from "./week";
+
+export interface CalendarDateObject {
+  year: number;
+  month: Month;
+  day: number;
+}
+
+export interface OrdinalDateObject {
+  year: number;
+  /** 1..366 */
+  day: number;
+}
+
+export interface CalendarWeekDateObject {
+  year: number;
+  month: Month;
+  /** 1..6 */
+  week: WeekOfMonth;
+  weekday: Weekday;
+}
+
+export interface OrdinalWeekDateObject {
+  year: number;
+  /** 1..53 */
+  week: number;
+  weekday: Weekday;
+}
+
+export type DateObject =
+  | CalendarDateObject
+  | OrdinalDateObject
+  | CalendarWeekDateObject
+  | OrdinalWeekDateObject;
 
 // Leap
 
@@ -29,7 +62,7 @@ export const daysInYear = (year: number): DaysInYear => {
   return (DAYS_IN_YEAR_WITHOUT_LEAP_DAY + +isLeapYear(year)) as DaysInYear;
 };
 
-export const dayOfYear = (date: DateObject): number => {
+export const dayOfYear = (date: CalendarDateObject): number => {
   // date.month が
   //   1 ならば 13
   //   2 ならば 14
