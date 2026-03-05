@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
+import { isLeapYear } from "./date.ts";
 import { DateTime } from "./datetime.ts";
-import { isLeapYear } from "./number.ts";
 import {
-  Weekday,
   dayOfWeek,
+  Weekday,
+  weekdayStringShort,
   weekOfMonth,
   weekOfYear,
-  weekdayStringShort,
   weeksInMonth,
   weeksInYear,
 } from "./week.ts";
@@ -32,23 +32,24 @@ test.each([
   { leap: true, weekDay: 6 },
   { leap: true, weekDay: 5, weekStart: Weekday.Mon },
   { leap: true, weekDay: 0, weekStart: Weekday.Mon },
-])(
-  "weeksInYear / leap=$leap, weekday=$weekDay, weekStart=$weekStart",
-  ({ leap, weekDay, weekStart }) => {
-    let year = 2000;
-    while (
-      isLeapYear(year) !== leap ||
-      dayOfWeek({ year, month: 1, day: 1 }) !== weekDay
-    ) {
-      year++;
-    }
-    const expectWeeksInYear = weekOfYear(
-      DateTime.from([year]).endOf("year"),
-      weekStart,
-    );
-    expect(weeksInYear(year, weekStart)).toBe(expectWeeksInYear);
-  },
-);
+])("weeksInYear / leap=$leap, weekday=$weekDay, weekStart=$weekStart", ({
+  leap,
+  weekDay,
+  weekStart,
+}) => {
+  let year = 2000;
+  while (
+    isLeapYear(year) !== leap ||
+    dayOfWeek({ year, month: 1, day: 1 }) !== weekDay
+  ) {
+    year++;
+  }
+  const expectWeeksInYear = weekOfYear(
+    DateTime.from([year]).endOf("year"),
+    weekStart,
+  );
+  expect(weeksInYear(year, weekStart)).toBe(expectWeeksInYear);
+});
 
 describe("weekOfYear", () => {
   test("weekOfYear", () => {
@@ -69,12 +70,14 @@ test.each([
   { year: 2023, month: 4, weeks: 6 },
   { year: 2023, month: 10, weeks: 5 },
   { year: 2023, month: 10, weeks: 6, weekStart: Weekday.Mon },
-] as const)(
-  "weeksInMonth($year, $month, $weekStart) === $weeks",
-  ({ year, month, weeks: expected, weekStart }) => {
-    expect(weeksInMonth(year, month, weekStart)).toBe(expected);
-  },
-);
+] as const)("weeksInMonth($year, $month, $weekStart) === $weeks", ({
+  year,
+  month,
+  weeks: expected,
+  weekStart,
+}) => {
+  expect(weeksInMonth(year, month, weekStart)).toBe(expected);
+});
 
 describe("weekOfMonth", () => {
   describe("1日に週が始まる場合", () => {

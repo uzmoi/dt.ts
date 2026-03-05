@@ -1,5 +1,5 @@
+import { daysInMonth, MONTHS_IN_YEAR, type Month } from "../date.ts";
 import type { DateTimeObject } from "../datetime.ts";
-import { MONTHS_IN_YEAR, daysInMonth, type Month } from "../number.ts";
 import { dateToString } from "../string.ts";
 import {
   HOURS_IN_DAY,

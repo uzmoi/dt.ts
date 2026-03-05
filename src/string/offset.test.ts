@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { formatOffset, parseOffset } from "./offset";
+import { formatOffset, parseOffset } from "./offset.ts";
 
 describe("formatOffset", () => {
   test("Z", () => {

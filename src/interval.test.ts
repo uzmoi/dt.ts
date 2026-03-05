@@ -1,20 +1,22 @@
 import { describe, expect, test } from "vitest";
-import { DateTime } from "./datetime";
-import type { DurationObject } from "./duration";
-import { Interval } from "./interval";
 import {
   DAYS_IN_YEAR_WITHOUT_LEAP_DAY,
-  HOURS_IN_DAY,
-  MILLIS_IN_SECOND,
-  MINUTES_IN_HOUR,
-  MONTHS_IN_YEAR,
-  SECONDS_IN_MINUTE,
   daysInMonth,
+  MONTHS_IN_YEAR,
   type Month,
-} from "./number";
+} from "./date.ts";
+import { DateTime } from "./datetime.ts";
+import type { DurationObject } from "./duration.ts";
+import { Interval } from "./interval.ts";
+import {
+  HOURS_IN_DAY,
+  MILLISECONDS_IN_SECOND,
+  MINUTES_IN_HOUR,
+  SECONDS_IN_MINUTE,
+} from "./time.ts";
 
 describe("Interval", () => {
-  // prettier-ignore
+  // biome-ignore format: table
   const plus: DurationObject = {
     years:        1,
     months:       2,
@@ -27,11 +29,11 @@ describe("Interval", () => {
   const start = DateTime.from("2022-11-07T01:23:45.678Z");
   test.each<DurationObject>([
     plus,
-    // prettier-ignore
+    // biome-ignore format: table
     { years: 2, months: 1, days: 30, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 },
-    // prettier-ignore
+    // biome-ignore format: table
     { years: 5, months: 2, days: 27, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 },
-    // prettier-ignore
+    // biome-ignore format: table
     { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 },
   ])("new %j", dur => {
     expect(Interval.after(start, dur)).toMatchObject({ ...dur });
@@ -45,7 +47,7 @@ describe("Interval", () => {
     expect(interval.to("months")).toBe(1 * MONTHS_IN_YEAR + 2);
   });
   test(".to('milliseconds')", () => {
-    // prettier-ignore
+    // biome-ignore format: 可読性
     const expectedDays = plus.years * DAYS_IN_YEAR_WITHOUT_LEAP_DAY
       + daysInMonth(start.year + plus.years, start.month + 1 as Month)
       + daysInMonth(start.year + plus.years + 1, (start.month + 2) % MONTHS_IN_YEAR as Month)
@@ -54,7 +56,7 @@ describe("Interval", () => {
       [HOURS_IN_DAY, plus.hours],
       [MINUTES_IN_HOUR, plus.minutes],
       [SECONDS_IN_MINUTE, plus.seconds],
-      [MILLIS_IN_SECOND, plus.milliseconds],
+      [MILLISECONDS_IN_SECOND, plus.milliseconds],
     ].reduce((prev, [rate, value]) => prev * rate + value, expectedDays);
     const interval = Interval.after(start, plus);
     expect(interval.to("milliseconds")).toBe(expected);

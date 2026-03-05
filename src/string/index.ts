@@ -1,3 +1,3 @@
-export * from "./month";
-export * from "./offset";
-export { formatInt } from "./utils";
+export * from "./month.ts";
+export * from "./offset.ts";
+export { formatInt } from "./utils.ts";

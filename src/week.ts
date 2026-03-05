@@ -1,12 +1,12 @@
 import { modulo } from "emnorst";
-import { DateObject } from "./datetime.ts";
 import {
   dayOfYear,
   daysInMonth,
   isLeapYear,
   leapDays,
   type Month,
-} from "./number.ts";
+} from "./date.ts";
+import type { DateObject } from "./datetime.ts";
 import type { Head3 } from "./string/utils.ts";
 
 export const DAYS_IN_WEEK = 7;

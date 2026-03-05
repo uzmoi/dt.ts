@@ -15,6 +15,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["./src"]
 }

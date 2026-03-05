@@ -1,4 +1,4 @@
-import type { Weekday, WeekOfMonth } from "./week";
+import type { Weekday, WeekOfMonth } from "./week.ts";
 
 export interface CalendarDateObject {
   year: number;

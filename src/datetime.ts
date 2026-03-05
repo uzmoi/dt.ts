@@ -1,25 +1,21 @@
 import { modulo } from "emnorst";
-import type { DurationObject } from "./duration.ts";
 import {
-  HOURS_IN_DAY,
-  MILLIS_IN_SECOND,
-  MINUTES_IN_HOUR,
-  MONTHS_IN_YEAR,
-  SECONDS_IN_MINUTE,
   dayOfYear,
   daysInMonth,
   isLeapYear,
+  MONTHS_IN_YEAR,
   type Month,
-} from "./number.ts";
+} from "./date.ts";
+import type { DurationObject } from "./duration.ts";
 import { dateToString } from "./string.ts";
-import { TimeObject, timeToString } from "./time.ts";
+import { type TimeObject, timeToString } from "./time.ts";
 import {
   DAYS_IN_WEEK,
   dayOfWeek,
+  type Weekday,
+  type WeekOfMonth,
   weekOfMonth,
   weekOfYear,
-  type WeekOfMonth,
-  type Weekday,
 } from "./week.ts";
 
 export type DateObject = {
@@ -72,14 +68,14 @@ export interface DateTimeObject extends DateObject, TimeObject {}
 const normalizedDateTimeFrom = (
   get: (key: keyof DateTimeObject) => number,
 ): DateTime => {
-  // prettier-ignore
+  // biome-ignore format: table
   const time = normalizeTime({
     hour:        get("hour"),
     minute:      get("minute"),
     second:      get("second"),
     millisecond: get("millisecond"),
   });
-  // prettier-ignore
+  // biome-ignore format: table
   const date = normalizeDate({
     day:   get("day") + time.day,
     month: get("month"),
@@ -97,7 +93,7 @@ const normalizedDateTimeFrom = (
   );
 };
 
-// prettier-ignore
+// biome-ignore format: table
 export type DateTimeTuple = [
   year?:        number,
   month?:       number,
@@ -115,7 +111,7 @@ export type DateTimeLike =
   | number
   | Date;
 
-// prettier-ignore
+// biome-ignore format: table
 const dateTimeDefaults: DateTimeObject = {
   year:        1970,
   month:       1,

@@ -1,16 +1,8 @@
 import { assert } from "emnorst";
-import { DateTime, normalizeTime, type DateTimeLike } from "./datetime";
-import type { DurationObject } from "./duration";
-import {
-  HOURS_IN_DAY,
-  MILLIS_IN_SECOND,
-  MINUTES_IN_HOUR,
-  MONTHS_IN_YEAR,
-  SECONDS_IN_MINUTE,
-  daysInMonth,
-  type Month,
-} from "./number";
-import { daysBetween } from "./relative";
+import { daysInMonth, MONTHS_IN_YEAR, type Month } from "./date.ts";
+import { DateTime, type DateTimeLike, normalizeTime } from "./datetime.ts";
+import type { DurationObject } from "./duration.ts";
+import { daysBetween } from "./relative.ts";
 
 export class Interval {
   static from(this: void, start: DateTimeLike, end: DateTimeLike): Interval {
@@ -33,11 +25,14 @@ export class Interval {
     return new Interval(startDt, startDt.plus(dur));
   }
 
-  constructor(readonly start: DateTime, readonly end: DateTime) {}
+  constructor(
+    readonly start: DateTime,
+    readonly end: DateTime,
+  ) {}
 
   toDuration(): DurationObject {
     const { start, end } = this;
-    // prettier-ignore
+    // biome-ignore format: table
     const time = normalizeTime({
       hour:        end.hour        - start.hour,
       minute:      end.minute      - start.minute,
@@ -65,14 +60,15 @@ export class Interval {
       days += daysInCurrentMonth();
     }
 
+    // biome-ignore format: table
     return {
-      years:        Math.floor(months / MONTHS_IN_YEAR), // prettier-ignore
-      months:       months % MONTHS_IN_YEAR, // prettier-ignore
-      days:         days, // prettier-ignore
-      hours:        time.hour, // prettier-ignore
-      minutes:      time.minute, // prettier-ignore
-      seconds:      time.second, // prettier-ignore
-      milliseconds: time.millisecond, // prettier-ignore
+      years:        Math.floor(months / MONTHS_IN_YEAR),
+      months:       months % MONTHS_IN_YEAR,
+      days:         days,
+      hours:        time.hour,
+      minutes:      time.minute,
+      seconds:      time.second,
+      milliseconds: time.millisecond,
     };
   }
   to(this: Interval, key: keyof DurationObject): number {

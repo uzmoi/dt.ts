@@ -1,5 +1,5 @@
-import type { DateObject } from "./datetime";
-import { dayOfYear, DAYS_IN_YEAR_WITHOUT_LEAP_DAY, leapDays } from "./number";
+import { DAYS_IN_YEAR_WITHOUT_LEAP_DAY, dayOfYear, leapDays } from "./date.ts";
+import type { DateObject } from "./datetime.ts";
 
 export const daysBetween = (start: DateObject, end: DateObject): number => {
   return (

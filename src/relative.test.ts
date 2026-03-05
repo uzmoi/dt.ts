@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import type { DateObject } from "./datetime";
-import { daysInMonth, daysInYear } from "./number";
-import { daysBetween } from "./relative";
+import { daysInMonth, daysInYear } from "./date.ts";
+import type { DateObject } from "./datetime.ts";
+import { daysBetween } from "./relative.ts";
 
 describe("daysBetween", () => {
   test("same date", () => {
@@ -22,7 +22,7 @@ describe("daysBetween", () => {
     const start: DateObject = { year: 2023, month: 12, day: 7 };
     const end: DateObject = { year: 2025, month: 2, day: 2 };
     expect(daysBetween(start, end)).toBe(
-      // prettier-ignore
+      // biome-ignore format: 可読性
       + daysInMonth(2023, 12) - 7
       + daysInYear(2024)
       + daysInMonth(2025, 1) + 2,

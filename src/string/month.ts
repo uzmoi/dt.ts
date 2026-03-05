@@ -1,5 +1,5 @@
-import type { Month } from "../number";
-import type { Head3 } from "./utils";
+import type { Month } from "../date.ts";
+import type { Head3 } from "./utils.ts";
 
 const monthStringArray = [
   "January",
