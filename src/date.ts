@@ -52,7 +52,8 @@ export const isLeapYear = (year: number): boolean => {
 };
 
 export const leapDays = (year: number): number => {
-  return ((year / 4) | 0) - ((year / 100) | 0) + ((year / 400) | 0);
+  // year >> 2 === Math.floor(year / 4)
+  return (year >> 2) - ((year / 100) | 0) + ((year / 400) | 0);
 };
 
 // Month
