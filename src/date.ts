@@ -61,6 +61,19 @@ export const MONTHS_IN_YEAR = 12;
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
+export const monthOfOrdinalDay = (year: number, ordinalDay: number): Month => {
+  // 係数を機械の力で探索した式
+  // なぜ1月と2月は+365すると動くのかは謎
+
+  const d =
+    ordinalDay +
+    (ordinalDay < 31 + 28 ? DAYS_IN_YEAR_WITHOUT_LEAP_DAY : -isLeapYear(year));
+
+  const m = ((d + 63) / 30.61 + 10) | 0;
+
+  return ((m % MONTHS_IN_YEAR) + 1) as Month;
+};
+
 // Day
 
 export type DaysInYear = 365 | 366;
