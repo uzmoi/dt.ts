@@ -1,0 +1,57 @@
+name: Publish Package
+
+on:
+  push:
+    tags: [v*.*.*]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  version:
+    outputs:
+      npm-version: ${{ steps.version.outputs.npm-version }}
+      jsr-version: ${{ steps.version.outputs.jsr-version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          sparse-checkout: |
+            package.json
+            jsr.json
+          sparse-checkout-cone-mode: false
+
+      - name: Read version
+        id: version
+        run: |
+          NPM_VERSION=$(jq -er '"/v" + .version' package.json)
+          JSR_VERSION=$(jq -er '"/v" + .version' jsr.json)
+          echo "npm-version=${NPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "jsr-version=${JSR_VERSION}" >> $GITHUB_OUTPUT
+
+  publish-npm:
+    needs: version
+    if: endsWith(github.ref, needs.version.outputs.npm-version)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install
+      - run: pnpm build
+
+      - run: pnpm publish
+
+  publish-jsr:
+    needs: version
+    if: endsWith(github.ref, needs.version.outputs.jsr-version)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - run: npx jsr publish
