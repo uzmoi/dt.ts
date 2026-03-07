@@ -106,7 +106,7 @@ export const dayOfYear = (date: CalendarDateObject): number => {
 
 export type DaysInMonth = 28 | 29 | 30 | 31;
 
-// daysInYearAverage / 12
+// DAYS_IN_YEAR_AVERAGE / 12
 export const DAYS_IN_MONTH_AVERAGE = 30.436875;
 
 const daysInMonthArray = [
