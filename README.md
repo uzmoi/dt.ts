@@ -1,20 +1,19 @@
-# datetime.js
+# dt.ts
 
-[![CI](https://github.com/uzmoi/datetime.js/actions/workflows/ci.yml/badge.svg)](https://github.com/uzmoi/datetime.js/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/uzmoi/datetime.js/branch/main/graph/badge.svg?token=N5VTZ5QWCB)](https://codecov.io/gh/uzmoi/datetime.js)
-[![npm version](https://img.shields.io/npm/v/@rizzzse/datetime/latest?logo=npm)](https://www.npmjs.com/package/@rizzzse/datetime)
-[![package size](https://img.shields.io/bundlephobia/min/@rizzzse/datetime)](https://bundlephobia.com/package/@rizzzse/datetime)
+[![NPM Version][npm-badge]](https://www.npmjs.com/package/@uzmoi/dt)
+[![JSR Version][jsr-badge]](https://jsr.io/@uzmoi/dt)
+[![License][license-badge]](https://opensource.org/license/MIT)
+[![Bundle size][bundlejs-badge]](https://bundlejs.com/?q=@uzmoi/dt&treeshake=[*])
+[![Test][test-badge]](https://github.com/uzmoi/dt.ts/actions/workflows/test.yml)
+[![Codecov][codecov-badge]](https://app.codecov.io/gh/uzmoi/dt.ts)
+
+[npm-badge]: https://img.shields.io/npm/v/@uzmoi/dt?style=flat-square&logo=npm
+[jsr-badge]: https://img.shields.io/jsr/v/@uzmoi/dt?style=flat-square&logo=jsr
+[license-badge]: https://img.shields.io/github/license/uzmoi/dt.ts?style=flat-square
+[bundlejs-badge]: https://img.shields.io/bundlejs/size/@uzmoi/dt?style=flat-square
+[test-badge]: https://img.shields.io/github/actions/workflow/status/uzmoi/dt.ts/test.yml?style=flat-square&label=Test
+[codecov-badge]: https://img.shields.io/codecov/c/gh/uzmoi/dt.ts?style=flat-square
 
 ```ts
-// cjs
-const { DateTime } = require("@rizzzse/datetime");
-// esm
-import { DateTime } from "@rizzzse/datetime";
-```
-
-```html
-<script src="https://unpkg.com/@rizzzse/datetime@0.3"></script>
-<script>
-    rdt.DateTime;
-</script>
+import { DateTime } from "@uzmoi/dt";
 ```
