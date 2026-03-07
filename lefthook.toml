@@ -1,0 +1,9 @@
+[pre-commit]
+parallel = true
+
+[pre-commit.commands.biome-check]
+run = "pnpm exec biome check --error-on-warnings --no-errors-on-unmatched {staged_files}"
+
+[pre-commit.commands.cSpell]
+skip = true
+run = "pnpm exec cspell lint --no-progress --no-must-find-files {staged_files}"
