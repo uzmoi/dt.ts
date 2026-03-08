@@ -104,13 +104,11 @@ export const weeksInMonth = (
 export type WeekOfMonth = 1 | 2 | 3 | 4 | 5 | 6;
 
 export const weekOfMonth = (
-  date: DateObject,
+  date: CalendarDateObject,
   weekStart = weekStartDefault,
 ): WeekOfMonth => {
-  const weekdayOffset = dayOfWeek({
-    year: date.year,
-    month: date.month,
-    day: 1 + DAYS_IN_WEEK - weekStart,
-  });
-  return Math.ceil((weekdayOffset + date.day) / DAYS_IN_WEEK) as WeekOfMonth;
+  const weekday = dayOfWeek(date);
+  // 初週のうち前月の日数 + 今月の日付
+  const days = ((weekday - date.day - weekStart + 6) % DAYS_IN_WEEK) + date.day;
+  return ((days / DAYS_IN_WEEK + 1) | 0) as WeekOfMonth;
 };
