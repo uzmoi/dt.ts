@@ -98,8 +98,7 @@ export const dayOfYear = (date: CalendarDateObject): number => {
   // fairfieldの公式
   // -64 === -122 + 31(1月の日数) + 28(2月の日数) - 1(dayが1から始まるため、1月1日を0とする調整)
   const dayOfYearWithoutLeapDay =
-    (((((306 * m) / 10) | 0) - 64 + date.day) % DAYS_IN_YEAR_WITHOUT_LEAP_DAY) +
-    1;
+    (((m * 30.6 - 64 + date.day) | 0) % DAYS_IN_YEAR_WITHOUT_LEAP_DAY) + 1;
 
   const leapDay = +(date.month > 2 && isLeapYear(date.year));
   return dayOfYearWithoutLeapDay + leapDay;
