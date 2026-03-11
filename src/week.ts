@@ -1,4 +1,3 @@
-import { modulo } from "emnorst";
 import {
   dayOfYear,
   daysInMonth,
@@ -51,17 +50,20 @@ export const weekdayStringShort = (date: Weekday): WeekdayStringShort => {
   return weekDayStringArray[date].slice(0, 3) as WeekdayStringShort;
 };
 
-export type WeeksInYear = 52 | 53;
+export type WeeksInYear = 53 | 54;
 
 export const weeksInYear = (
   year: number,
   weekStart = weekStartDefault,
 ): WeeksInYear => {
-  const weekday = modulo(
-    year + leapDays(year - 1) - weekStart + 1,
-    DAYS_IN_WEEK,
-  );
-  return weekday === 0 && isLeapYear(year) ? 53 : 52;
+  // 元日が週の何日目か
+  const weekday =
+    (year + leapDays(year - 1) - weekStart + DAYS_IN_WEEK) % DAYS_IN_WEEK;
+
+  // 7 * 52 === 364
+  // 平年は必ず53週になる。
+  // 閏年も基本的には53週だが、元日が週の終わりだと大晦日が週の始まりとなり54週になる。
+  return weekday === 6 && isLeapYear(year) ? 54 : 53;
 };
 
 // biome-ignore format: table
