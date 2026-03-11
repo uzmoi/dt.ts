@@ -1,3 +1,4 @@
+import { modulo } from "emnorst";
 import {
   dayOfYear,
   daysInMonth,
@@ -110,7 +111,9 @@ export const weekOfMonth = (
   weekStart = weekStartDefault,
 ): WeekOfMonth => {
   const weekday = dayOfWeek(date);
+
   // 初週のうち前月の日数 + 今月の日付
-  const days = ((weekday - date.day - weekStart + 6) % DAYS_IN_WEEK) + date.day;
-  return ((days / DAYS_IN_WEEK + 1) | 0) as WeekOfMonth;
+  const days =
+    modulo(weekday - date.day - weekStart + 1, DAYS_IN_WEEK) + date.day;
+  return Math.ceil(days / DAYS_IN_WEEK) as WeekOfMonth;
 };
