@@ -1,0 +1,13 @@
+{
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@uzmoi/dt",
+  "version": "0.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publish": {
+    "include": ["CHANGELOG.md", "LICENSE", "README.md", "src"],
+    "exclude": ["**/*.test.ts"]
+  }
+}
