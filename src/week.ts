@@ -1,12 +1,12 @@
 import { modulo } from "emnorst";
 import {
+  type CalendarDateObject,
   dayOfYear,
   daysInMonth,
   isLeapYear,
   leapDays,
   type Month,
 } from "./date.ts";
-import type { DateObject } from "./datetime.ts";
 import type { Head3 } from "./string/utils.ts";
 
 export const DAYS_IN_WEEK = 7;
@@ -25,8 +25,8 @@ export const Weekday = {
 
 export const weekStartDefault: Weekday = Weekday.Sun;
 
-export const dayOfWeek = (date: DateObject): Weekday => {
-  const d = date.year + leapDays(date.year - 1) + dayOfYear(date);
+export const dayOfWeek = (date: CalendarDateObject): Weekday => {
+  const d = date.year + leapDays(date.year - 1) + dayOfYear(date) - 1;
   return (d % DAYS_IN_WEEK) as Weekday;
 };
 
