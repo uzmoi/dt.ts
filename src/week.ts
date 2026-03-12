@@ -83,14 +83,13 @@ export const weekOfYear = (
   date: CalendarDateObject,
   weekStart = weekStartDefault,
 ): WeekOfYear => {
-  const weekdayOffset = dayOfWeek({
-    year: date.year,
-    month: 1,
-    day: 1 + DAYS_IN_WEEK - weekStart,
-  });
-  return Math.floor(
-    (weekdayOffset + dayOfYear(date) - 1) / DAYS_IN_WEEK + 1,
-  ) as WeekOfYear;
+  const daysInPreviousYear =
+    (date.year + leapDays(date.year - 1) - weekStart + DAYS_IN_WEEK) %
+    DAYS_IN_WEEK;
+
+  // 初週のうち前年の日数 + 今年の日数
+  const days = daysInPreviousYear + dayOfYear(date);
+  return Math.ceil(days / DAYS_IN_WEEK) as WeekOfMonth;
 };
 
 export type WeeksInMonth = 4 | 5 | 6;
@@ -112,8 +111,12 @@ export const weekOfMonth = (
 ): WeekOfMonth => {
   const weekday = dayOfWeek(date);
 
+  const daysInPreviousMonth = modulo(
+    weekday - date.day - weekStart + 1,
+    DAYS_IN_WEEK,
+  );
+
   // 初週のうち前月の日数 + 今月の日付
-  const days =
-    modulo(weekday - date.day - weekStart + 1, DAYS_IN_WEEK) + date.day;
+  const days = daysInPreviousMonth + date.day;
   return Math.ceil(days / DAYS_IN_WEEK) as WeekOfMonth;
 };
