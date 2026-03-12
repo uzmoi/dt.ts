@@ -8,7 +8,14 @@ import {
   type Month,
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
-import { formatTime, type TimeObject } from "./time.ts";
+import {
+  formatTime,
+  HOURS_IN_DAY,
+  MILLISECONDS_IN_SECOND,
+  MINUTES_IN_HOUR,
+  SECONDS_IN_MINUTE,
+  type TimeObject,
+} from "./time.ts";
 import {
   DAYS_IN_WEEK,
   dayOfWeek,
@@ -51,7 +58,7 @@ export const normalizeTime = (
   time: TimeObject,
 ): TimeObject & { day: number } => {
   const millisecond = time.millisecond;
-  const second = time.second + Math.floor(millisecond / MILLIS_IN_SECOND);
+  const second = time.second + Math.floor(millisecond / MILLISECONDS_IN_SECOND);
   const minute = time.minute + Math.floor(second / SECONDS_IN_MINUTE);
   const hour = time.hour + Math.floor(minute / MINUTES_IN_HOUR);
   return {
@@ -59,7 +66,7 @@ export const normalizeTime = (
     hour: modulo(hour, HOURS_IN_DAY),
     minute: modulo(minute, MINUTES_IN_HOUR),
     second: modulo(second, SECONDS_IN_MINUTE),
-    millisecond: modulo(millisecond, MILLIS_IN_SECOND),
+    millisecond: modulo(millisecond, MILLISECONDS_IN_SECOND),
   };
 };
 
@@ -264,6 +271,7 @@ export class DateTime implements DateTimeObject {
       dt.day = this.day - this.dayOfWeek();
       key = "day";
     }
+    // biome-ignore lint/suspicious/noConfusingLabels: 他にどうしろってんだ。
     block: {
       if (key === "second") break block;
       dt.second = 0;
@@ -283,7 +291,7 @@ export class DateTime implements DateTimeObject {
     if (key === "week") {
       return start.plus({ days: DAYS_IN_WEEK, milliseconds: -1 });
     } else {
-      return start.plus({ [key + "s"]: 1, milliseconds: -1 });
+      return start.plus({ [`${key}s`]: 1, milliseconds: -1 });
     }
   }
 }
