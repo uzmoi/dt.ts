@@ -23,7 +23,8 @@ export const Weekday = {
   Sat: 6, // Saturday
 } as const satisfies Record<WeekdayStringShort, Weekday>;
 
-export const weekStartDefault: Weekday = Weekday.Sun;
+// このasは本来必要ないが、TypeScriptがconstのアノテーションを無視しやがるので人間の力を理解らせなければいけない。
+export const weekStartDefault: Weekday = Weekday.Sun as Weekday;
 
 export const dayOfWeek = (date: CalendarDateObject): Weekday => {
   const d = date.year + leapDays(date.year - 1) + dayOfYear(date) - 1;
