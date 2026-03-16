@@ -1,4 +1,4 @@
-export const formatInt = (n: number, len: number) =>
+export const formatInt = (n: number, len: number): string =>
   String(n | 0).padStart(len, "0");
 
 export type Head3<T extends string> =

@@ -84,7 +84,7 @@ const dateTimeDefaults: DateTimeObject = {
   millisecond: 0,
 };
 
-export const dateTimeUnits = [
+export const dateTimeUnits: readonly (keyof DateTimeObject)[] = [
   "year",
   "month",
   "day",
@@ -92,7 +92,7 @@ export const dateTimeUnits = [
   "minute",
   "second",
   "millisecond",
-] as const satisfies readonly (keyof DateTimeObject)[];
+] as const;
 
 export class DateTime implements DateTimeObject {
   static now(this: void): DateTime {
@@ -130,7 +130,7 @@ export class DateTime implements DateTimeObject {
   static fromMillis(this: void, ms: number): DateTime {
     return DateTime.fromObject({ millisecond: ms });
   }
-  static fromObject(this: void, dtObject: Partial<DateTimeObject>) {
+  static fromObject(this: void, dtObject: Partial<DateTimeObject>): DateTime {
     return normalizedDateTimeFrom(
       key => dtObject[key] ?? dateTimeDefaults[key],
     );

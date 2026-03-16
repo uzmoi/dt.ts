@@ -13,7 +13,7 @@ export const DAYS_IN_WEEK = 7;
 
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-export const Weekday = {
+export const Weekday: Record<WeekdayStringShort, Weekday> = {
   Sun: 0, // Sunday
   Mon: 1, // Monday
   Tue: 2, // Tuesday
@@ -21,10 +21,9 @@ export const Weekday = {
   Thu: 4, // Thursday
   Fri: 5, // Friday
   Sat: 6, // Saturday
-} as const satisfies Record<WeekdayStringShort, Weekday>;
+};
 
-// このasは本来必要ないが、TypeScriptがconstのアノテーションを無視しやがるので人間の力を理解らせなければいけない。
-export const weekStartDefault: Weekday = Weekday.Sun as Weekday;
+export const weekStartDefault: Weekday = Weekday.Sun;
 
 export const dayOfWeek = (date: CalendarDateObject): Weekday => {
   const d = date.year + leapDays(date.year - 1) + dayOfYear(date) - 1;
@@ -56,7 +55,7 @@ export type WeeksInYear = 53 | 54;
 
 export const weeksInYear = (
   year: number,
-  weekStart = weekStartDefault,
+  weekStart: Weekday = weekStartDefault,
 ): WeeksInYear => {
   // 元日が週の何日目か
   const weekday =
@@ -82,7 +81,7 @@ export type WeekOfYear =
  */
 export const weekOfYear = (
   date: CalendarDateObject,
-  weekStart = weekStartDefault,
+  weekStart: Weekday = weekStartDefault,
 ): WeekOfYear => {
   const daysInPreviousYear =
     (date.year + leapDays(date.year - 1) - weekStart + DAYS_IN_WEEK) %
@@ -108,7 +107,7 @@ export type WeekOfMonth = 1 | 2 | 3 | 4 | 5 | 6;
 
 export const weekOfMonth = (
   date: CalendarDateObject,
-  weekStart = weekStartDefault,
+  weekStart: Weekday = weekStartDefault,
 ): WeekOfMonth => {
   const weekday = dayOfWeek(date);
 
