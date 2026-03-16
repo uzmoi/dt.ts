@@ -1,8 +1,11 @@
 import { modulo } from "emnorst";
 import {
+  type CalendarDateObject,
+  type DayOfMonth,
   dayOfYear,
   formatDate,
   isLeapYear,
+  type Month,
   normalizeCalendarDate,
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
@@ -23,12 +26,6 @@ import {
   weekOfYear,
 } from "./week.ts";
 
-export type DateObject = {
-  year: number;
-  month: number;
-  day: number;
-};
-
 export const normalizeTimeObject = (
   time: TimeObject,
 ): TimeObject & { day: number } => {
@@ -45,7 +42,7 @@ export const normalizeTimeObject = (
   };
 };
 
-export interface DateTimeObject extends DateObject, TimeObject {}
+export interface DateTimeObject extends CalendarDateObject, TimeObject {}
 
 const normalizedDateTimeFrom = (
   get: (key: keyof DateTimeObject) => number,
@@ -119,8 +116,8 @@ export class DateTime implements DateTimeObject {
   static fromNativeDate(this: void, nativeDate: Date): DateTime {
     return new DateTime(
       nativeDate.getUTCFullYear(),
-      nativeDate.getUTCMonth() + 1,
-      nativeDate.getUTCDate(),
+      (nativeDate.getUTCMonth() + 1) as Month,
+      nativeDate.getUTCDate() as DayOfMonth,
       nativeDate.getUTCHours(),
       nativeDate.getUTCMinutes(),
       nativeDate.getUTCSeconds(),
@@ -141,8 +138,8 @@ export class DateTime implements DateTimeObject {
 
   private constructor(
     readonly year: number,
-    readonly month: number,
-    readonly day: number,
+    readonly month: Month,
+    readonly day: DayOfMonth,
     readonly hour: number,
     readonly minute: number,
     readonly second: number,
@@ -211,6 +208,7 @@ export class DateTime implements DateTimeObject {
   startOf(this: DateTime, key: DurationUnit): DateTime {
     const dt: Partial<DateTimeObject> = { millisecond: 0 };
     if (key === "week") {
+      // @ts-expect-error with で normalize されるので安全
       dt.day = this.day - this.dayOfWeek();
       key = "day";
     }
