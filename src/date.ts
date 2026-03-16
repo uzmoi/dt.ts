@@ -123,3 +123,37 @@ export type DayOfMonth =
   | (10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19)
   | (20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29)
   | (30 | 31);
+
+export const normalizeCalendarDate = (
+  year: number,
+  month: number,
+  day: number,
+): CalendarDateObject => {
+  year += Math.floor((month - 1) / MONTHS_IN_YEAR);
+  month %= MONTHS_IN_YEAR;
+  if (month <= 0) month += MONTHS_IN_YEAR;
+
+  while (day > daysInMonth(year, month as Month)) {
+    day -= daysInMonth(year, month as Month);
+    month++;
+    if (month > MONTHS_IN_YEAR) {
+      month = 1;
+      year++;
+    }
+  }
+
+  while (day <= 0) {
+    month--;
+    if (month < 1) {
+      month = MONTHS_IN_YEAR;
+      year--;
+    }
+    day += daysInMonth(year, month as Month);
+  }
+
+  return {
+    year,
+    month: month as Month,
+    day,
+  };
+};

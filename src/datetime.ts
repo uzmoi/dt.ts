@@ -1,11 +1,9 @@
 import { modulo } from "emnorst";
 import {
   dayOfYear,
-  daysInMonth,
   formatDate,
   isLeapYear,
-  MONTHS_IN_YEAR,
-  type Month,
+  normalizeCalendarDate,
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
 import {
@@ -31,30 +29,7 @@ export type DateObject = {
   day: number;
 };
 
-export const normalizeDate = (date: DateObject): DateObject => {
-  let day = date.day;
-  let month = modulo(date.month, MONTHS_IN_YEAR) || MONTHS_IN_YEAR;
-  let year = date.year + Math.floor((date.month - 1) / MONTHS_IN_YEAR);
-  while (day > daysInMonth(year, month as Month)) {
-    day -= daysInMonth(year, month as Month);
-    month++;
-    if (month > MONTHS_IN_YEAR) {
-      month = 1;
-      year++;
-    }
-  }
-  while (day <= 0) {
-    month--;
-    if (month < 1) {
-      month = MONTHS_IN_YEAR;
-      year--;
-    }
-    day += daysInMonth(year, month as Month);
-  }
-  return { day, month, year };
-};
-
-export const normalizeTime = (
+export const normalizeTimeObject = (
   time: TimeObject,
 ): TimeObject & { day: number } => {
   const millisecond = time.millisecond;
@@ -76,18 +51,17 @@ const normalizedDateTimeFrom = (
   get: (key: keyof DateTimeObject) => number,
 ): DateTime => {
   // biome-ignore format: table
-  const time = normalizeTime({
+  const time = normalizeTimeObject({
     hour:        get("hour"),
     minute:      get("minute"),
     second:      get("second"),
     millisecond: get("millisecond"),
   });
-  // biome-ignore format: table
-  const date = normalizeDate({
-    day:   get("day") + time.day,
-    month: get("month"),
-    year:  get("year"),
-  });
+  const date = normalizeCalendarDate(
+    get("year"),
+    get("month"),
+    get("day") + time.day,
+  );
   // @ts-expect-error
   return new DateTime(
     date.year,
