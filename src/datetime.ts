@@ -133,12 +133,7 @@ export class DateTime implements DateTimeObject {
   static fromMillis(this: void, ms: number): DateTime {
     return DateTime.fromObject({ millisecond: ms });
   }
-  static fromObject<T extends Partial<DateTimeObject>>(
-    this: void,
-    dtObject: [unknown] extends [T extends DateTime ? unknown : never]
-      ? never
-      : T,
-  ) {
+  static fromObject(this: void, dtObject: Partial<DateTimeObject>) {
     return normalizedDateTimeFrom(
       key => dtObject[key] ?? dateTimeDefaults[key],
     );
