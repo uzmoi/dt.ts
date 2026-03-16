@@ -7,10 +7,7 @@ describe("DateTime", () => {
     const dt = DateTime.now();
     expect(DateTime.from(dt)).toBe(dt);
   });
-  test("fromTuple", () => {
-    const dt = DateTime.fromTuple([2023, 4, 15, 22, 45, 12, 123]);
-    expect(dt.toString()).toBe("2023-04-15T22:45:12.123");
-  });
+
   test("from millisecond", () => {
     const date = new Date();
     expect(DateTime.fromMillis(date.getTime())).toStrictEqual(
@@ -59,7 +56,7 @@ describe("DateTime", () => {
 
 describe("plus", () => {
   test("plus", () => {
-    const dt = DateTime.from([2022]).plus({
+    const dt = DateTime.from({ year: 2022 }).plus({
       months: 10,
       days: 6,
       hours: 1,
@@ -72,13 +69,13 @@ describe("plus", () => {
   });
 
   test("うるう日の1年後", () => {
-    const dt = DateTime.from([2020, 2, 29]);
+    const dt = DateTime.from({ year: 2020, month: 2, day: 29 });
     expect(dt.isInLeapYear()).toBe(true);
     expect(dt.plus({ years: 1 }).toString()).toBe("2021-03-01T00:00:00");
   });
 
   test("plus order", () => {
-    const base = DateTime.from([2022]);
+    const base = DateTime.from({ year: 2022 });
     expect(isLeapYear(2024)).toBe(true);
     expect(base.plus({ years: 2, days: 60 })).toEqual(
       base.plus({ years: 2 }).plus({ days: 60 }),

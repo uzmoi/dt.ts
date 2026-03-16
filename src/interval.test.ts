@@ -72,8 +72,8 @@ describe("Interval", () => {
   test.todo("contains");
 
   test("overlaps", () => {
-    const a = Interval.after([2000], { years: 20 });
-    const b = Interval.after([2010], { years: 20 });
+    const a = Interval.after({ year: 2000 }, { years: 20 });
+    const b = Interval.after({ year: 2010 }, { years: 20 });
     expect(a.overlaps(b)).toBe(true);
     expect(b.overlaps(a)).toBe(true);
   });

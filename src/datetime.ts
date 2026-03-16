@@ -74,23 +74,7 @@ const normalizedDateTimeFrom = (
   );
 };
 
-// biome-ignore format: table
-export type DateTimeTuple = [
-  year?:        number,
-  month?:       number,
-  day?:         number,
-  hour?:        number,
-  minute?:      number,
-  second?:      number,
-  millisecond?: number,
-];
-
-export type DateTimeLike =
-  | Partial<DateTimeObject>
-  | DateTimeTuple
-  | string
-  | number
-  | Date;
+export type DateTimeLike = Partial<DateTimeObject> | string | number | Date;
 
 // biome-ignore format: table
 const dateTimeDefaults: DateTimeObject = {
@@ -130,9 +114,6 @@ export class DateTime implements DateTimeObject {
     if (source instanceof Date) {
       return DateTime.fromNativeDate(source);
     }
-    if (Array.isArray(source)) {
-      return DateTime.fromTuple(source);
-    }
     return DateTime.fromObject(source);
   }
   static fromNativeDate(this: void, nativeDate: Date): DateTime {
@@ -151,13 +132,6 @@ export class DateTime implements DateTimeObject {
   }
   static fromMillis(this: void, ms: number): DateTime {
     return DateTime.fromObject({ millisecond: ms });
-  }
-  static fromTuple(this: void, tuple: DateTimeTuple): DateTime {
-    const dateTimeObject: Partial<DateTimeObject> = {};
-    dateTimeUnits.forEach((unit, i) => {
-      dateTimeObject[unit] = tuple[i];
-    });
-    return DateTime.fromObject(dateTimeObject);
   }
   static fromObject<T extends Partial<DateTimeObject>>(
     this: void,
