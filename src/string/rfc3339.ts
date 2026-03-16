@@ -1,4 +1,5 @@
 import {
+  type DayOfMonth,
   daysInMonth,
   formatDate,
   MONTHS_IN_YEAR,
@@ -47,7 +48,16 @@ export const parseRFC3339 = (
   const offset = parseOffset(matchResult[8], { allowLowerCase: true });
   if (offset == null) return null;
 
-  return { year, month, day, hour, minute, second, millisecond, offset };
+  return {
+    year,
+    month: month as Month,
+    day: day as DayOfMonth,
+    hour,
+    minute,
+    second,
+    millisecond,
+    offset,
+  };
 };
 
 export interface RFC3339FormatOptions {
