@@ -196,6 +196,19 @@ export class DateTime implements DateTimeObject {
       this.millisecond,
     );
   }
+
+  equals(this: DateTime, dt: DateTime): boolean {
+    return +this === +dt;
+  }
+
+  isBefore(this: DateTime, dt: DateTime): boolean {
+    return this < dt;
+  }
+
+  isAfter(this: DateTime, dt: DateTime): boolean {
+    return this > dt;
+  }
+
   with(this: DateTime, dt: Partial<DateTimeObject>): DateTime {
     return normalizedDateTimeFrom(key => dt[key] ?? this[key]);
   }
