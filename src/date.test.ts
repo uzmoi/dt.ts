@@ -9,6 +9,7 @@ import {
   formatDate,
   type Month,
   monthOfOrdinalDay,
+  normalizeCalendarDate,
 } from "./date.ts";
 
 fc.configureGlobal({ seed: 12345678 });
@@ -83,4 +84,24 @@ describe("daysInMonth", () => {
 
     expect(daysInMonth(year, month)).toBe(dateFns.getDaysInMonth(date));
   });
+});
+
+describe("normalizeCalendarDate", () => {
+  test.prop([fc.integer({ min: 1970, max: 9999 }), fc.integer(), fc.integer()])(
+    "fuzz",
+    (year, month, day) => {
+      const date = new Date();
+      date.setFullYear(year);
+      date.setMonth(month - 1);
+      date.setDate(day);
+
+      fc.pre(!Number.isNaN(date.getTime()));
+
+      expect(normalizeCalendarDate(year, month, day)).toEqual({
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+      });
+    },
+  );
 });
