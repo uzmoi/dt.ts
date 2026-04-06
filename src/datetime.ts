@@ -9,6 +9,7 @@ import {
   normalizeCalendarDate,
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
+import { NativeDate } from "./native-date.ts";
 import {
   formatTime,
   HOURS_IN_DAY,
@@ -71,7 +72,11 @@ const normalizedDateTimeFrom = (
   );
 };
 
-export type DateTimeLike = Partial<DateTimeObject> | string | number | Date;
+export type DateTimeLike =
+  | Partial<DateTimeObject>
+  | string
+  | number
+  | NativeDate;
 
 // biome-ignore format: table
 const dateTimeDefaults: DateTimeObject = {
@@ -96,7 +101,7 @@ export const dateTimeUnits: readonly (keyof DateTimeObject)[] = [
 
 export class DateTime implements DateTimeObject {
   static now(this: void): DateTime {
-    return DateTime.fromMillis(Date.now());
+    return DateTime.fromMillis(NativeDate.now());
   }
   static from(this: void, source: DateTimeLike): DateTime {
     if (source instanceof DateTime) {
@@ -108,12 +113,12 @@ export class DateTime implements DateTimeObject {
     if (typeof source === "string") {
       return DateTime.fromString(source);
     }
-    if (source instanceof Date) {
+    if (source instanceof NativeDate) {
       return DateTime.fromNativeDate(source);
     }
     return DateTime.fromObject(source);
   }
-  static fromNativeDate(this: void, nativeDate: Date): DateTime {
+  static fromNativeDate(this: void, nativeDate: NativeDate): DateTime {
     return new DateTime(
       nativeDate.getUTCFullYear(),
       (nativeDate.getUTCMonth() + 1) as Month,
@@ -125,7 +130,7 @@ export class DateTime implements DateTimeObject {
     );
   }
   static fromString(this: void, string: string): DateTime {
-    return DateTime.fromNativeDate(new Date(string));
+    return DateTime.fromNativeDate(new NativeDate(string));
   }
   static fromMillis(this: void, ms: number): DateTime {
     return DateTime.fromObject({ millisecond: ms });
@@ -186,7 +191,7 @@ export class DateTime implements DateTimeObject {
     return this.toString();
   }
   valueOf(this: this): number {
-    return Date.UTC(
+    return NativeDate.UTC(
       this.year,
       this.month - 1,
       this.day,

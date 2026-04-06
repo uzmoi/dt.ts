@@ -19,5 +19,24 @@
     "formatter": {
       "arrowParentheses": "asNeeded"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**", "!**/*.test.*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedGlobals": {
+              "level": "error",
+              "options": {
+                "deniedGlobals": {
+                  "Date": "Use `NativeDate` instead."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
