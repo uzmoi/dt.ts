@@ -1,4 +1,4 @@
-import { modulo } from "emnorst";
+import { modulo } from "@uzmoi/ut/ils";
 import {
   type CalendarDateObject,
   type DayOfMonth,

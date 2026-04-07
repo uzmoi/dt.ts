@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/uzmoi/dt.ts#readme",
   "dependencies": {
-    "emnorst": "^1.0.0-next.2"
+    "@uzmoi/ut": "0.1.x"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
