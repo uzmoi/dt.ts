@@ -1,3 +1,4 @@
+trustPolicy: no-downgrade
 minimumReleaseAge: 10080 # 1 week
 minimumReleaseAgeExclude:
   - "@uzmoi/*"
