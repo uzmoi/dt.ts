@@ -1,8 +1,10 @@
-import { assert } from "emnorst";
 import { daysInMonth, MONTHS_IN_YEAR, type Month } from "./date.ts";
-import { DateTime, type DateTimeLike, normalizeTime } from "./datetime.ts";
+import {
+  DateTime,
+  type DateTimeLike,
+  normalizeTimeObject,
+} from "./datetime.ts";
 import type { DurationObject } from "./duration.ts";
-import { daysBetween } from "./relative.ts";
 
 export class Interval {
   static from(this: void, start: DateTimeLike, end: DateTimeLike): Interval {
@@ -33,7 +35,7 @@ export class Interval {
   toDuration(): DurationObject {
     const { start, end } = this;
     // biome-ignore format: table
-    const time = normalizeTime({
+    const time = normalizeTimeObject({
       hour:        end.hour        - start.hour,
       minute:      end.minute      - start.minute,
       second:      end.second      - start.second,
@@ -71,34 +73,7 @@ export class Interval {
       milliseconds: time.millisecond,
     };
   }
-  to(this: Interval, key: keyof DurationObject): number {
-    if (key === "years") {
-      return this.years;
-    }
-    if (key === "months") {
-      return this.years * MONTHS_IN_YEAR + this.months;
-    }
-    const days = daysBetween(this.start, this.end);
-    if (key === "days") {
-      return days;
-    }
-    const hours = days * HOURS_IN_DAY + this.hours;
-    if (key === "hours") {
-      return hours;
-    }
-    const minutes = hours * MINUTES_IN_HOUR + this.minutes;
-    if (key === "minutes") {
-      return minutes;
-    }
-    const seconds = minutes * SECONDS_IN_MINUTE + this.seconds;
-    if (key === "seconds") {
-      return seconds;
-    }
-    if (key === "milliseconds") {
-      return seconds * MILLIS_IN_SECOND + this.milliseconds;
-    }
-    assert.unreachable<typeof key>();
-  }
+
   contains(this: Interval, dt: DateTime): boolean {
     return this.start <= dt && dt <= this.end;
   }
