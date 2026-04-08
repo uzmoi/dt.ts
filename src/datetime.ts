@@ -3,15 +3,14 @@ import {
   type CalendarDateObject,
   type DayOfMonth,
   dayOfYear,
-  formatDate,
   isLeapYear,
   type Month,
   normalizeCalendarDate,
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
 import { NativeDate } from "./native-date.ts";
+import { formatRFC3339 } from "./string/rfc3339.ts";
 import {
-  formatTime,
   HOURS_IN_DAY,
   MILLISECONDS_IN_SECOND,
   MINUTES_IN_HOUR,
@@ -127,6 +126,7 @@ export class DateTime implements DateTimeObject {
       nativeDate.getUTCMinutes(),
       nativeDate.getUTCSeconds(),
       nativeDate.getUTCMilliseconds(),
+      0,
     );
   }
   static fromString(this: void, string: string): DateTime {
@@ -149,6 +149,7 @@ export class DateTime implements DateTimeObject {
     readonly minute: number,
     readonly second: number,
     readonly millisecond: number,
+    readonly offset = 0,
   ) {}
 
   isInLeapYear(): boolean {
@@ -182,10 +183,10 @@ export class DateTime implements DateTimeObject {
   }
 
   /**
-   * @returns "YYYY-MM-DDThh:mm:ss.nnn"
+   * @returns "YYYY-MM-DDThh:mm:ss.nnnZ"
    */
   toString(this: this): string {
-    return `${formatDate(this)}T${formatTime(this)}`;
+    return formatRFC3339(this);
   }
   toJSON(this: this): string {
     return this.toString();
@@ -196,7 +197,7 @@ export class DateTime implements DateTimeObject {
       this.month - 1,
       this.day,
       this.hour,
-      this.minute,
+      this.minute + this.offset,
       this.second,
       this.millisecond,
     );
