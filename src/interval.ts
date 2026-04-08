@@ -7,22 +7,16 @@ import {
 import type { DurationObject } from "./duration.ts";
 
 export class Interval {
-  static from(this: void, start: DateTimeLike, end: DateTimeLike): Interval {
+  static from(start: DateTimeLike, end: DateTimeLike): Interval {
     return new Interval(DateTime.from(start), DateTime.from(end));
   }
-  static before(
-    this: void,
-    end: DateTimeLike,
-    dur: Partial<DurationObject>,
-  ): Interval {
+
+  static before(end: DateTimeLike, dur: Partial<DurationObject>): Interval {
     const endDt = DateTime.from(end);
     return new Interval(endDt.minus(dur), endDt);
   }
-  static after(
-    this: void,
-    start: DateTimeLike,
-    dur: Partial<DurationObject>,
-  ): Interval {
+
+  static after(start: DateTimeLike, dur: Partial<DurationObject>): Interval {
     const startDt = DateTime.from(start);
     return new Interval(startDt, startDt.plus(dur));
   }
@@ -77,6 +71,7 @@ export class Interval {
   contains(this: Interval, dt: DateTime): boolean {
     return this.start <= dt && dt <= this.end;
   }
+
   overlaps(this: Interval, i: Interval): boolean {
     return this.start <= i.end && i.start <= this.end;
   }

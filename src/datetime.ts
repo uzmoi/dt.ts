@@ -99,10 +99,11 @@ export const dateTimeUnits: readonly (keyof DateTimeObject)[] = [
 ] as const;
 
 export class DateTime implements DateTimeObject {
-  static now(this: void): DateTime {
+  static now(): DateTime {
     return DateTime.fromMillis(NativeDate.now());
   }
-  static from(this: void, source: DateTimeLike): DateTime {
+
+  static from(source: DateTimeLike): DateTime {
     if (source instanceof DateTime) {
       return source;
     }
@@ -117,7 +118,8 @@ export class DateTime implements DateTimeObject {
     }
     return DateTime.fromObject(source);
   }
-  static fromNativeDate(this: void, nativeDate: NativeDate): DateTime {
+
+  static fromNativeDate(nativeDate: NativeDate): DateTime {
     return new DateTime(
       nativeDate.getUTCFullYear(),
       (nativeDate.getUTCMonth() + 1) as Month,
@@ -129,13 +131,16 @@ export class DateTime implements DateTimeObject {
       0,
     );
   }
-  static fromString(this: void, string: string): DateTime {
+
+  static fromString(string: string): DateTime {
     return DateTime.fromNativeDate(new NativeDate(string));
   }
-  static fromMillis(this: void, ms: number): DateTime {
+
+  static fromMillis(ms: number): DateTime {
     return DateTime.fromObject({ millisecond: ms });
   }
-  static fromObject(this: void, dtObject: Partial<DateTimeObject>): DateTime {
+
+  static fromObject(dtObject: Partial<DateTimeObject>): DateTime {
     return normalizedDateTimeFrom(
       key => dtObject[key] ?? dateTimeDefaults[key],
     );
@@ -185,13 +190,15 @@ export class DateTime implements DateTimeObject {
   /**
    * @returns "YYYY-MM-DDThh:mm:ss.nnnZ"
    */
-  toString(this: this): string {
+  toString(): string {
     return formatRFC3339(this);
   }
-  toJSON(this: this): string {
+
+  toJSON(): string {
     return this.toString();
   }
-  valueOf(this: this): number {
+
+  valueOf(): number {
     return NativeDate.UTC(
       this.year,
       this.month - 1,
@@ -215,15 +222,18 @@ export class DateTime implements DateTimeObject {
     return this > dt;
   }
 
-  with(this: DateTime, dt: Partial<DateTimeObject>): DateTime {
+  with(dt: Partial<DateTimeObject>): DateTime {
     return normalizedDateTimeFrom(key => dt[key] ?? this[key]);
   }
-  plus(this: DateTime, dur: Partial<DurationObject>): DateTime {
+
+  plus(dur: Partial<DurationObject>): DateTime {
     return normalizedDateTimeFrom(key => this[key] + (dur[`${key}s`] ?? 0));
   }
-  minus(this: DateTime, dur: Partial<DurationObject>): DateTime {
+
+  minus(dur: Partial<DurationObject>): DateTime {
     return normalizedDateTimeFrom(key => this[key] - (dur[`${key}s`] ?? 0));
   }
+
   startOf(this: DateTime, key: DurationUnit): DateTime {
     const dt: Partial<DateTimeObject> = { millisecond: 0 };
     if (key === "week") {
@@ -246,6 +256,7 @@ export class DateTime implements DateTimeObject {
     }
     return this.with(dt);
   }
+
   endOf(this: DateTime, key: DurationUnit): DateTime {
     const start = this.startOf(key);
     if (key === "week") {
