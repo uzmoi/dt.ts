@@ -23,27 +23,29 @@ export const parseRFC3339 = (dt: string): DateTimeWithOffsetObject | null => {
   const matchResult = RFC3339Re.exec(dt);
   if (matchResult == null) return null;
 
-  const year = +matchResult[1];
+  // biome-ignore-start lint/style/noNonNullAssertion: RFC3339Reから自明。
+  const year = +matchResult[1]!;
 
-  const month = +matchResult[2];
+  const month = +matchResult[2]!;
   if (month === 0 || month > MONTHS_IN_YEAR) return null;
 
-  const day = +matchResult[3];
+  const day = +matchResult[3]!;
   if (day === 0 || day > daysInMonth(year, month as Month)) return null;
 
-  const hour = +matchResult[4];
+  const hour = +matchResult[4]!;
   if (hour >= HOURS_IN_DAY) return null;
 
-  const minute = +matchResult[5];
+  const minute = +matchResult[5]!;
   if (minute >= MINUTES_IN_HOUR) return null;
 
-  const second = +matchResult[6];
+  const second = +matchResult[6]!;
   if (second >= SECONDS_IN_MINUTE) return null;
 
-  const ms = matchResult[7].slice(1, 4).padEnd(3, "0");
-  const millisecond = +`${ms}.${matchResult[7].slice(4)}`;
+  const ms = matchResult[7]!.slice(1, 4).padEnd(3, "0");
+  const millisecond = +`${ms}.${matchResult[7]!.slice(4)}`;
 
-  const offset = parseOffset(matchResult[8], { allowLowerCase: true });
+  const offset = parseOffset(matchResult[8]!, { allowLowerCase: true });
+  // biome-ignore-end lint/style/noNonNullAssertion: RFC3339Reから自明。
   if (offset == null) return null;
 
   return {
