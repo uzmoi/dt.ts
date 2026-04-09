@@ -44,8 +44,17 @@ export const normalizeTimeObject = (
 
 export interface DateTimeObject extends CalendarDateObject, TimeObject {}
 
+export interface DateTimeWithOffsetObject extends DateTimeObject {
+  /**
+   * Represents the offset from UTC in minutes.
+   * For example, for UTC+9, the value is 540.
+   */
+  offset: number;
+}
+
 const normalizedDateTimeFrom = (
   get: (key: keyof DateTimeObject) => number,
+  offset = 0,
 ): DateTime => {
   // biome-ignore format: table
   const time = normalizeTimeObject({
@@ -68,11 +77,12 @@ const normalizedDateTimeFrom = (
     time.minute,
     time.second,
     time.millisecond,
+    offset,
   );
 };
 
 export type DateTimeLike =
-  | Partial<DateTimeObject>
+  | Partial<DateTimeWithOffsetObject>
   | string
   | number
   | NativeDate;
@@ -98,7 +108,7 @@ export const dateTimeUnits: readonly (keyof DateTimeObject)[] = [
   "millisecond",
 ] as const;
 
-export class DateTime implements DateTimeObject {
+export class DateTime implements DateTimeWithOffsetObject {
   static now(): DateTime {
     return DateTime.fromMillis(NativeDate.now());
   }
@@ -154,9 +164,10 @@ export class DateTime implements DateTimeObject {
     return DateTime.fromObject({ millisecond: ms });
   }
 
-  static fromObject(dtObject: Partial<DateTimeObject>): DateTime {
+  static fromObject(dtObject: Partial<DateTimeWithOffsetObject>): DateTime {
     return normalizedDateTimeFrom(
       key => dtObject[key] ?? dateTimeDefaults[key],
+      dtObject.offset,
     );
   }
 

@@ -5,7 +5,7 @@ import {
   MONTHS_IN_YEAR,
   type Month,
 } from "../date.ts";
-import type { DateTimeObject } from "../datetime.ts";
+import type { DateTimeWithOffsetObject } from "../datetime.ts";
 import {
   formatTime,
   HOURS_IN_DAY,
@@ -19,9 +19,7 @@ import { formatOffset, parseOffset } from "./offset.ts";
 const RFC3339Re =
   /^(\d{4})-(\d\d)-(\d\d)[T ](\d\d):(\d\d):(\d\d)((?:\.\d+)?)(Z|[+-]\d\d:\d\d)$/;
 
-export const parseRFC3339 = (
-  dt: string,
-): (DateTimeObject & { offset: number }) | null => {
+export const parseRFC3339 = (dt: string): DateTimeWithOffsetObject | null => {
   const matchResult = RFC3339Re.exec(dt);
   if (matchResult == null) return null;
 
@@ -66,7 +64,7 @@ export interface RFC3339FormatOptions {
 }
 
 export const formatRFC3339 = (
-  dt: DateTimeObject & { offset: number },
+  dt: DateTimeWithOffsetObject,
   options?: RFC3339FormatOptions,
 ): string => {
   const delim = options?.deliminator ?? "T";
