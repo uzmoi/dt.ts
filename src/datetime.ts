@@ -9,7 +9,7 @@ import {
 } from "./date.ts";
 import type { DurationObject } from "./duration.ts";
 import { NativeDate } from "./native-date.ts";
-import { formatRFC3339 } from "./string/rfc3339.ts";
+import { formatRFC3339, parseRFC3339 } from "./string/rfc3339.ts";
 import {
   HOURS_IN_DAY,
   MILLISECONDS_IN_SECOND,
@@ -133,7 +133,21 @@ export class DateTime implements DateTimeObject {
   }
 
   static fromString(string: string): DateTime {
-    return DateTime.fromNativeDate(new NativeDate(string));
+    const dt = parseRFC3339(string);
+    if (dt == null) {
+      throw new SyntaxError("Invalid DateTime format");
+    }
+
+    return new DateTime(
+      dt.year,
+      dt.month,
+      dt.day,
+      dt.hour,
+      dt.minute,
+      dt.second,
+      dt.millisecond,
+      dt.offset,
+    );
   }
 
   static fromMillis(ms: number): DateTime {
