@@ -17,7 +17,7 @@ import { formatOffset, parseOffset } from "./offset.ts";
 // https://www.rfc-editor.org/info/rfc3339
 
 const RFC3339Re =
-  /^(\d{4})-(\d\d)-(\d\d)[T ](\d\d):(\d\d):(\d\d)((?:\.\d+)?)(Z|[+-]\d\d:\d\d)$/;
+  /^(\d{4})-(\d\d)-(\d\d)[T ](\d\d):(\d\d):(\d\d)((?:\.\d+)?)(Z|[+-]\d\d:\d\d)$/i;
 
 export const parseRFC3339 = (dt: string): DateTimeWithOffsetObject | null => {
   const matchResult = RFC3339Re.exec(dt);

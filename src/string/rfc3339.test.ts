@@ -24,6 +24,11 @@ describe("parse", () => {
       offset: -(24 * 60 + 59),
     });
   });
+
+  test("Allow lower case t and z", () => {
+    expect(parseRFC3339("1970-01-01t00:00:00z")).not.toBeNull();
+  });
+
   describe("invalid", () => {
     test("month", () => {
       expect(parseRFC3339("2000-00-01T00:00:00Z")).toBeNull();
