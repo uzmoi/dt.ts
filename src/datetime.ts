@@ -218,7 +218,7 @@ export class DateTime implements DateTimeObject {
       this.month - 1,
       this.day,
       this.hour,
-      this.minute + this.offset,
+      this.minute - this.offset,
       this.second,
       this.millisecond,
     );
