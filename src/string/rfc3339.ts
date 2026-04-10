@@ -24,22 +24,31 @@ export const parseRFC3339 = (dt: string): DateTimeWithOffsetObject | null => {
   if (matchResult == null) return null;
 
   // biome-ignore-start lint/style/noNonNullAssertion: RFC3339Reから自明。
+  // 0000-9999
   const year = +matchResult[1]!;
 
+  // 01-12
   const month = +matchResult[2]!;
   if (month === 0 || month > MONTHS_IN_YEAR) return null;
 
+  // 01-28, 01-29, 01-31, 01-31
   const day = +matchResult[3]!;
   if (day === 0 || day > daysInMonth(year, month as Month)) return null;
 
+  // 00-23
   const hour = +matchResult[4]!;
   if (hour >= HOURS_IN_DAY) return null;
 
+  // 00-59
   const minute = +matchResult[5]!;
   if (minute >= MINUTES_IN_HOUR) return null;
 
+  // 00-60
+  // 正の閏秒として60が許可されている。
   const second = +matchResult[6]!;
-  if (second >= SECONDS_IN_MINUTE) return null;
+  if (second > SECONDS_IN_MINUTE) {
+    return null;
+  }
 
   const ms = matchResult[7]!.slice(1, 4).padEnd(3, "0");
   const millisecond = +`${ms}.${matchResult[7]!.slice(4)}`;
@@ -47,6 +56,14 @@ export const parseRFC3339 = (dt: string): DateTimeWithOffsetObject | null => {
   const offset = parseOffset(matchResult[8]!, { allowLowerCase: true });
   // biome-ignore-end lint/style/noNonNullAssertion: RFC3339Reから自明。
   if (offset == null) return null;
+
+  // 閏秒は必ず UTC の 23:59:60 に挿入される。
+  if (second === 60) {
+    const t =
+      (hour * MINUTES_IN_HOUR + minute - offset + 1) %
+      (HOURS_IN_DAY * MINUTES_IN_HOUR);
+    if (t !== 0) return null;
+  }
 
   return {
     year,

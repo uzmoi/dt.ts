@@ -154,7 +154,8 @@ export class DateTime implements DateTimeWithOffsetObject {
       dt.day,
       dt.hour,
       dt.minute,
-      dt.second,
+      // 正の閏秒は59秒として扱う。
+      dt.second === 60 ? 59 : dt.second,
       dt.millisecond,
       dt.offset,
     );
