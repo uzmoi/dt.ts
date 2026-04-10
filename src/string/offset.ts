@@ -1,39 +1,6 @@
 import { HOURS_IN_DAY, MINUTES_IN_HOUR } from "../time.ts";
 import { formatInt } from "./utils.ts";
 
-export interface OffsetFormatOptions {
-  neverUseZ?: boolean;
-  allowOmitMinutes?: boolean;
-  ignoreNegativeZero?: boolean;
-  /** @default "extended" */
-  format?: "extended" | "basic";
-}
-
-export const formatOffset = (
-  offset: number,
-  options?: OffsetFormatOptions,
-): string => {
-  const isZero = options?.ignoreNegativeZero
-    ? offset === 0
-    : Object.is(offset, 0);
-
-  if (!options?.neverUseZ && isZero) {
-    return "Z";
-  }
-
-  const sign = isZero || offset > 0 ? "+" : "-";
-  const absOffset = Math.abs(offset);
-  const delim = options?.format === "basic" ? "" : ":";
-  const hour = formatInt(absOffset / MINUTES_IN_HOUR, 2);
-  const minute = formatInt(absOffset % MINUTES_IN_HOUR, 2);
-
-  if (options?.allowOmitMinutes && minute === "00") {
-    return sign + hour;
-  }
-
-  return sign + hour + delim + minute;
-};
-
 export interface OffsetParseOptions {
   allowLowerCase?: boolean;
   alwaysFull?: boolean;
@@ -72,4 +39,37 @@ export const parseOffset = (
   }
 
   return (offset[0] === "+" ? 1 : -1) * (hour * MINUTES_IN_HOUR + minute);
+};
+
+export interface OffsetFormatOptions {
+  neverUseZ?: boolean;
+  allowOmitMinutes?: boolean;
+  ignoreNegativeZero?: boolean;
+  /** @default "extended" */
+  format?: "extended" | "basic";
+}
+
+export const formatOffset = (
+  offset: number,
+  options?: OffsetFormatOptions,
+): string => {
+  const isZero = options?.ignoreNegativeZero
+    ? offset === 0
+    : Object.is(offset, 0);
+
+  if (!options?.neverUseZ && isZero) {
+    return "Z";
+  }
+
+  const sign = isZero || offset > 0 ? "+" : "-";
+  const absOffset = Math.abs(offset);
+  const delim = options?.format === "basic" ? "" : ":";
+  const hour = formatInt(absOffset / MINUTES_IN_HOUR, 2);
+  const minute = formatInt(absOffset % MINUTES_IN_HOUR, 2);
+
+  if (options?.allowOmitMinutes && minute === "00") {
+    return sign + hour;
+  }
+
+  return sign + hour + delim + minute;
 };
