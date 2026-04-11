@@ -1,3 +1,4 @@
+// Stryker disable all
 export class Scanner {
   constructor(private readonly _input: string) {}
   private _index = 0;

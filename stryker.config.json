@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "pnpm",
+  "reporters": ["html", "clear-text", "progress"],
+  "testRunner": "vitest",
+  "coverageAnalysis": "perTest",
+  "plugins": ["@stryker-mutator/vitest-runner"],
+  "mutate": ["src/**/!(*.test).ts"],
+  "incremental": true
+}
