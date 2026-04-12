@@ -36,7 +36,8 @@ export class Time implements TimeObject {
   static parse(time: string): Time | null {
     const result = timeRe.exec(time);
     if (result == null) return null;
-    return new Time(+result[1], +result[2], +result[3], +result[4]);
+    // biome-ignore lint/style/noNonNullAssertion: timeReから自明
+    return new Time(+result[1]!, +result[2]!, +result[3]!, +result[4]!);
   }
 
   constructor(
