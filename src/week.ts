@@ -7,13 +7,12 @@ import {
   leapDays,
   type Month,
 } from "./date.ts";
-import type { Head3 } from "./string/utils.ts";
 
 export const DAYS_IN_WEEK = 7;
 
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-export const Weekday: Record<WeekdayStringShort, Weekday> = {
+export const Weekday: Record<ShortWeekdayName, Weekday> = {
   Sun: 0, // Sunday
   Mon: 1, // Monday
   Tue: 2, // Tuesday
@@ -30,7 +29,7 @@ export const getDayOfWeek = (date: CalendarDateObject): Weekday => {
   return (d % DAYS_IN_WEEK) as Weekday;
 };
 
-const weekDayStringArray = [
+const WEEKDAY_NAMES_WITHOUT_DAY = [
   "Sun",
   "Mon",
   "Tues",
@@ -40,15 +39,30 @@ const weekDayStringArray = [
   "Satur", // cspell:disable-line
 ] as const;
 
-export type WeekdayStringLong = `${(typeof weekDayStringArray)[number]}day`;
-export type WeekdayStringShort = Head3<WeekdayStringLong>;
+export type WeekdayName =
+  | "Sunday"
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday";
 
-export const getWeekdayStringLong = (date: Weekday): WeekdayStringLong => {
-  return `${weekDayStringArray[date]}day`;
+export type ShortWeekdayName =
+  | "Sun"
+  | "Mon"
+  | "Tue"
+  | "Wed"
+  | "Thu"
+  | "Fri"
+  | "Sat";
+
+export const getWeekdayName = (date: Weekday): WeekdayName => {
+  return `${WEEKDAY_NAMES_WITHOUT_DAY[date]}day`;
 };
 
-export const getWeekdayStringShort = (date: Weekday): WeekdayStringShort => {
-  return weekDayStringArray[date].slice(0, 3) as WeekdayStringShort;
+export const getShortWeekdayName = (date: Weekday): ShortWeekdayName => {
+  return WEEKDAY_NAMES_WITHOUT_DAY[date].slice(0, 3) as ShortWeekdayName;
 };
 
 export type WeeksInYear = 53 | 54;

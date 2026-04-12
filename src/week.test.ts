@@ -4,8 +4,8 @@ import { describe, expect } from "vitest";
 import { type DayOfMonth, isLeapYear, type Month } from "./date.ts";
 import {
   getDayOfWeek,
-  getWeekdayStringLong,
-  getWeekdayStringShort,
+  getShortWeekdayName,
+  getWeekdayName,
   getWeekOfMonth,
   getWeekOfYear,
   getWeeksInMonth,
@@ -29,13 +29,13 @@ describe("getDayOfWeek", () => {
   });
 });
 
-describe("getWeekdayStringShort / getWeekdayStringLong", () => {
+describe("getWeekdayName / getShortWeekdayName", () => {
   test.each(Object.entries(Weekday))("short %s", (string, weekday) => {
-    expect(getWeekdayStringShort(weekday)).toBe(string);
+    expect(getShortWeekdayName(weekday)).toBe(string);
   });
 
   test.each(Object.entries(Weekday))("long %s", (_, weekday) => {
-    expect(getWeekdayStringLong(weekday)).toBe(
+    expect(getWeekdayName(weekday)).toBe(
       dateFns.format(dateFns.setDay(new Date(), weekday), "EEEE"),
     );
   });
