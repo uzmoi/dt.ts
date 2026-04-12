@@ -13,7 +13,8 @@ describe("parse", () => {
       millisecond: 0,
       offset: 0,
     });
-    expect(parseRFC3339("1975-12-31T23:59:59-24:59")).toEqual({
+
+    expect(parseRFC3339("1975-12-31T23:59:59-23:59")).toEqual({
       year: 1975,
       month: 12,
       day: 31,
@@ -21,7 +22,7 @@ describe("parse", () => {
       minute: 59,
       second: 59,
       millisecond: 0,
-      offset: -(24 * 60 + 59),
+      offset: -(24 * 60 - 1),
     });
   });
 
