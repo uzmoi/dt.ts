@@ -17,9 +17,7 @@ export const parseOffset = (
     return 0;
   }
 
-  const isBasicFormat = offset.length !== 6;
-
-  if (options?.alwaysExtended && isBasicFormat) {
+  if (options?.alwaysExtended && offset.length === 5) {
     return null;
   }
 
@@ -29,12 +27,8 @@ export const parseOffset = (
   }
 
   const hour = Number(matchResult[1]);
-  if (hour > HOURS_IN_DAY) {
-    return null;
-  }
-
   const minute = Number(matchResult[2] || "");
-  if (minute >= MINUTES_IN_HOUR) {
+  if (hour >= HOURS_IN_DAY || minute >= MINUTES_IN_HOUR) {
     return null;
   }
 
@@ -49,13 +43,21 @@ export interface OffsetFormatOptions {
   format?: "extended" | "basic";
 }
 
+const OFFSET_MAX = MINUTES_IN_HOUR * HOURS_IN_DAY;
+
 export const formatOffset = (
   offset: number,
   options?: OffsetFormatOptions,
 ): string => {
+  if (!(-OFFSET_MAX < offset && offset < OFFSET_MAX)) {
+    throw new RangeError(
+      `offset must be a valid number in minutes between -${OFFSET_MAX} and ${OFFSET_MAX}`,
+    );
+  }
+
   const isZero = options?.ignoreNegativeZero
-    ? offset === 0
-    : Object.is(offset, 0);
+    ? (offset | 0) === 0
+    : Object.is(Math.trunc(offset), 0);
 
   if (!options?.neverUseZ && isZero) {
     return "Z";
