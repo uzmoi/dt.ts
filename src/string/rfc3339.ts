@@ -1,7 +1,7 @@
 import {
   type DayOfMonth,
-  daysInMonth,
   formatDate,
+  getDaysInMonth,
   MONTHS_IN_YEAR,
   type Month,
 } from "../date.ts";
@@ -33,7 +33,7 @@ export const parseRFC3339 = (dt: string): OffsetDateTimeObject | null => {
 
   // 01-28, 01-29, 01-31, 01-31
   const day = +matchResult[3]!;
-  if (day === 0 || day > daysInMonth(year, month as Month)) return null;
+  if (day === 0 || day > getDaysInMonth(year, month as Month)) return null;
 
   // 00-23
   const hour = +matchResult[4]!;

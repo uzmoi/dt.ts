@@ -3,14 +3,14 @@ import * as dateFns from "date-fns";
 import { describe, expect } from "vitest";
 import { type DayOfMonth, isLeapYear, type Month } from "./date.ts";
 import {
-  dayOfWeek,
+  getDayOfWeek,
+  getWeekdayStringLong,
+  getWeekdayStringShort,
+  getWeekOfMonth,
+  getWeekOfYear,
+  getWeeksInMonth,
+  getWeeksInYear,
   Weekday,
-  weekdayStringLong,
-  weekdayStringShort,
-  weekOfMonth,
-  weekOfYear,
-  weeksInMonth,
-  weeksInYear,
 } from "./week.ts";
 
 const dateArbitrary = fc.date({
@@ -19,29 +19,29 @@ const dateArbitrary = fc.date({
   noInvalidDate: true,
 });
 
-describe("dayOfWeek", () => {
+describe("getDayOfWeek", () => {
   test.prop([dateArbitrary])("fuzz", date => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1) as Month;
     const day = date.getDate() as DayOfMonth;
 
-    expect(dayOfWeek({ year, month, day })).toBe(date.getDay());
+    expect(getDayOfWeek({ year, month, day })).toBe(date.getDay());
   });
 });
 
-describe("weekdayStringShort / weekdayStringLong", () => {
+describe("getWeekdayStringShort / getWeekdayStringLong", () => {
   test.each(Object.entries(Weekday))("short %s", (string, weekday) => {
-    expect(weekdayStringShort(weekday)).toBe(string);
+    expect(getWeekdayStringShort(weekday)).toBe(string);
   });
 
   test.each(Object.entries(Weekday))("long %s", (_, weekday) => {
-    expect(weekdayStringLong(weekday)).toBe(
+    expect(getWeekdayStringLong(weekday)).toBe(
       dateFns.format(dateFns.setDay(new Date(), weekday), "EEEE"),
     );
   });
 });
 
-describe("weeksInYear", () => {
+describe("getWeeksInYear", () => {
   test.each([
     { leap: false, weekDay: 0 },
     { leap: false, weekDay: 6 },
@@ -49,7 +49,7 @@ describe("weeksInYear", () => {
     { leap: true, weekDay: 6 },
     { leap: true, weekDay: 5, weekStart: Weekday.Mon },
     { leap: true, weekDay: 0, weekStart: Weekday.Mon },
-  ])("weeksInYear / leap=$leap, weekday=$weekDay, weekStart=$weekStart", ({
+  ])("getWeeksInYear / leap=$leap, weekday=$weekDay, weekStart=$weekStart", ({
     leap,
     weekDay,
     weekStart,
@@ -57,25 +57,27 @@ describe("weeksInYear", () => {
     let year = 2000;
     while (
       isLeapYear(year) !== leap ||
-      dayOfWeek({ year, month: 1, day: 1 }) !== weekDay
+      getDayOfWeek({ year, month: 1, day: 1 }) !== weekDay
     ) {
       year++;
     }
 
-    expect(weeksInYear(year, weekStart)).toBe(
-      weekOfYear({ year, month: 12, day: 31 }, weekStart),
+    expect(getWeeksInYear(year, weekStart)).toBe(
+      getWeekOfYear({ year, month: 12, day: 31 }, weekStart),
     );
   });
 });
 
-describe("weekOfYear", () => {
-  test("weekOfYear", () => {
-    expect(weekOfYear({ year: 2023, month: 1, day: 1 })).toBe(1);
-    expect(weekOfYear({ year: 2023, month: 1, day: 7 })).toBe(1);
-    expect(weekOfYear({ year: 2023, month: 1, day: 8 })).toBe(2);
+describe("getWeekOfYear", () => {
+  test("getWeekOfYear", () => {
+    expect(getWeekOfYear({ year: 2023, month: 1, day: 1 })).toBe(1);
+    expect(getWeekOfYear({ year: 2023, month: 1, day: 7 })).toBe(1);
+    expect(getWeekOfYear({ year: 2023, month: 1, day: 8 })).toBe(2);
   });
   test("weekStart", () => {
-    expect(weekOfYear({ year: 2023, month: 1, day: 2 }, Weekday.Mon)).toBe(2);
+    expect(getWeekOfYear({ year: 2023, month: 1, day: 2 }, Weekday.Mon)).toBe(
+      2,
+    );
   });
 
   test.prop([dateArbitrary, fc.integer({ min: 0, max: 6 })])(
@@ -85,7 +87,7 @@ describe("weekOfYear", () => {
       const month = (date.getMonth() + 1) as Month;
       const day = date.getDate() as DayOfMonth;
 
-      expect(weekOfYear({ year, month, day }, weekStart as Weekday)).toBe(
+      expect(getWeekOfYear({ year, month, day }, weekStart as Weekday)).toBe(
         dateFns.eachWeekOfInterval(
           { start: dateFns.startOfYear(date), end: date },
           { weekStartsOn: weekStart as Weekday },
@@ -95,7 +97,7 @@ describe("weekOfYear", () => {
   );
 });
 
-describe("weeksInMonth", () => {
+describe("getWeeksInMonth", () => {
   test.each([
     { year: 2015, month: 2, weeks: 4 },
     { year: 2016, month: 2, weeks: 5 },
@@ -104,13 +106,13 @@ describe("weeksInMonth", () => {
     { year: 2023, month: 4, weeks: 6 },
     { year: 2023, month: 10, weeks: 5 },
     { year: 2023, month: 10, weeks: 6, weekStart: Weekday.Mon },
-  ] as const)("weeksInMonth($year, $month, $weekStart) === $weeks", ({
+  ] as const)("getWeeksInMonth($year, $month, $weekStart) === $weeks", ({
     year,
     month,
     weeks: expected,
     weekStart,
   }) => {
-    expect(weeksInMonth(year, month, weekStart)).toBe(expected);
+    expect(getWeeksInMonth(year, month, weekStart)).toBe(expected);
   });
 
   test.prop([dateArbitrary, fc.integer({ min: 0, max: 6 })])(
@@ -119,28 +121,28 @@ describe("weeksInMonth", () => {
       const year = date.getFullYear();
       const month = (date.getMonth() + 1) as Month;
 
-      expect(weeksInMonth(year, month, weekStart as Weekday)).toBe(
+      expect(getWeeksInMonth(year, month, weekStart as Weekday)).toBe(
         dateFns.getWeeksInMonth(date, { weekStartsOn: weekStart as Weekday }),
       );
     },
   );
 });
 
-describe("weekOfMonth", () => {
+describe("getWeekOfMonth", () => {
   describe("1日に週が始まる場合", () => {
     test("7日は1", () => {
-      expect(weekOfMonth({ year: 2023, month: 1, day: 7 })).toBe(1);
+      expect(getWeekOfMonth({ year: 2023, month: 1, day: 7 })).toBe(1);
     });
     test("8日は2", () => {
-      expect(weekOfMonth({ year: 2023, month: 1, day: 8 })).toBe(2);
+      expect(getWeekOfMonth({ year: 2023, month: 1, day: 8 })).toBe(2);
     });
   });
   describe("2日に週が始まる場合", () => {
     test("1日は1", () => {
-      expect(weekOfMonth({ year: 2023, month: 4, day: 1 })).toBe(1);
+      expect(getWeekOfMonth({ year: 2023, month: 4, day: 1 })).toBe(1);
     });
     test("2日は2", () => {
-      expect(weekOfMonth({ year: 2023, month: 4, day: 2 })).toBe(2);
+      expect(getWeekOfMonth({ year: 2023, month: 4, day: 2 })).toBe(2);
     });
   });
 
@@ -151,7 +153,7 @@ describe("weekOfMonth", () => {
       const month = (date.getMonth() + 1) as Month;
       const day = date.getDate() as DayOfMonth;
 
-      expect(weekOfMonth({ year, month, day }, weekStart as Weekday)).toBe(
+      expect(getWeekOfMonth({ year, month, day }, weekStart as Weekday)).toBe(
         dateFns.getWeekOfMonth(date, { weekStartsOn: weekStart as Weekday }),
       );
     },

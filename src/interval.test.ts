@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import {
   DAYS_IN_YEAR_WITHOUT_LEAP_DAY,
-  daysInMonth,
+  getDaysInMonth,
   MONTHS_IN_YEAR,
   type Month,
 } from "./date.ts";
@@ -50,8 +50,8 @@ describe("Interval", () => {
   test.skip(".to('milliseconds')", () => {
     // biome-ignore format: 可読性
     const expectedDays = plus.years * DAYS_IN_YEAR_WITHOUT_LEAP_DAY
-      + daysInMonth(start.year + plus.years, start.month + 1 as Month)
-      + daysInMonth(start.year + plus.years + 1, (start.month + 2) % MONTHS_IN_YEAR as Month)
+      + getDaysInMonth(start.year + plus.years, start.month + 1 as Month)
+      + getDaysInMonth(start.year + plus.years + 1, (start.month + 2) % MONTHS_IN_YEAR as Month)
       + plus.days;
     const expected = [
       [HOURS_IN_DAY, plus.hours],

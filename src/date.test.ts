@@ -4,11 +4,11 @@ import { describe, expect } from "vitest";
 import {
   type CalendarDateObject,
   type DayOfMonth,
-  dayOfYear,
-  daysInMonth,
   formatDate,
+  getDayOfYear,
+  getDaysInMonth,
+  getMonthOfOrdinalDay,
   type Month,
-  monthOfOrdinalDay,
   normalizeCalendarDate,
 } from "./date.ts";
 
@@ -32,40 +32,41 @@ describe("formatDate", () => {
   });
 });
 
-describe("monthOfOrdinalDay", () => {
+describe("getMonthOfOrdinalDay", () => {
   const monthBoundaries = (y: number) => {
     let day = 0;
     const boundaries: [number, number][] = [];
     for (let month = 1; month <= 12; month++) {
       boundaries.push([day + 1, month]);
-      day += daysInMonth(y, month as Month);
+      day += getDaysInMonth(y, month as Month);
       boundaries.push([day, month]);
     }
     return boundaries;
   };
 
   test.each(monthBoundaries(2026))("平年の%i日目は%i月", (day, month) => {
-    expect(monthOfOrdinalDay(2026, day)).toBe(month);
+    expect(getMonthOfOrdinalDay(2026, day)).toBe(month);
   });
 
   test.each(monthBoundaries(2024))("閏年の%i日目は%i月", (day, month) => {
-    expect(monthOfOrdinalDay(2024, day)).toBe(month);
+    expect(getMonthOfOrdinalDay(2024, day)).toBe(month);
   });
 
   test.prop([dateArbitrary])("fuzz", date => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1) as Month;
 
-    expect(monthOfOrdinalDay(year, dateFns.getDayOfYear(date))).toBe(month);
+    expect(getMonthOfOrdinalDay(year, dateFns.getDayOfYear(date))).toBe(month);
   });
 });
 
-describe("dayOfYear", () => {
-  test("dayOfYear 1", () => {
-    expect(dayOfYear({ year: 2026, month: 1, day: 1 })).toBe(1);
+describe("getDayOfYear", () => {
+  test("getDayOfYear 1", () => {
+    expect(getDayOfYear({ year: 2026, month: 1, day: 1 })).toBe(1);
   });
-  test("dayOfYear 365", () => {
-    expect(dayOfYear({ year: 2026, month: 12, day: 31 })).toBe(365);
+
+  test("getDayOfYear 365", () => {
+    expect(getDayOfYear({ year: 2026, month: 12, day: 31 })).toBe(365);
   });
 
   test.prop([dateArbitrary])("fuzz", date => {
@@ -73,16 +74,16 @@ describe("dayOfYear", () => {
     const month = (date.getMonth() + 1) as Month;
     const day = date.getDate() as DayOfMonth;
 
-    expect(dayOfYear({ year, month, day })).toBe(dateFns.getDayOfYear(date));
+    expect(getDayOfYear({ year, month, day })).toBe(dateFns.getDayOfYear(date));
   });
 });
 
-describe("daysInMonth", () => {
+describe("getDaysInMonth", () => {
   test.prop([dateArbitrary])("fuzz", date => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1) as Month;
 
-    expect(daysInMonth(year, month)).toBe(dateFns.getDaysInMonth(date));
+    expect(getDaysInMonth(year, month)).toBe(dateFns.getDaysInMonth(date));
   });
 });
 

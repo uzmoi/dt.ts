@@ -64,7 +64,10 @@ export type MonthIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
-export const monthOfOrdinalDay = (year: number, ordinalDay: number): Month => {
+export const getMonthOfOrdinalDay = (
+  year: number,
+  ordinalDay: number,
+): Month => {
   // 係数を機械の力で探索した式
   // なぜ1月と2月は+365すると動くのかは謎
 
@@ -86,11 +89,11 @@ export const DAYS_IN_YEAR_WITHOUT_LEAP_DAY = 365;
 // DAYS_IN_YEAR_WITHOUT_LEAP_DAY + 1/4 - 1/100 + 1/400
 export const DAYS_IN_YEAR_AVERAGE = 365.2425;
 
-export const daysInYear = (year: number): DaysInYear => {
+export const getDaysInYear = (year: number): DaysInYear => {
   return (DAYS_IN_YEAR_WITHOUT_LEAP_DAY + +isLeapYear(year)) as DaysInYear;
 };
 
-export const dayOfYear = (date: CalendarDateObject): number => {
+export const getDayOfYear = (date: CalendarDateObject): number => {
   // date.month が
   //   1 ならば 13
   //   2 ならば 14
@@ -115,7 +118,7 @@ const daysInMonthArray = [
   31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
 ] as const satisfies readonly DaysInMonth[];
 
-export const daysInMonth = (year: number, month: Month): DaysInMonth => {
+export const getDaysInMonth = (year: number, month: Month): DaysInMonth => {
   return month === 2 && isLeapYear(year)
     ? 29
     : daysInMonthArray[(month - 1) as MonthIndex];
@@ -137,8 +140,8 @@ export const normalizeCalendarDate = (
   month %= MONTHS_IN_YEAR;
   if (month <= 0) month += MONTHS_IN_YEAR;
 
-  while (day > daysInMonth(year, month as Month)) {
-    day -= daysInMonth(year, month as Month);
+  while (day > getDaysInMonth(year, month as Month)) {
+    day -= getDaysInMonth(year, month as Month);
     month++;
     if (month > MONTHS_IN_YEAR) {
       month = 1;
@@ -152,7 +155,7 @@ export const normalizeCalendarDate = (
       month = MONTHS_IN_YEAR;
       year--;
     }
-    day += daysInMonth(year, month as Month);
+    day += getDaysInMonth(year, month as Month);
   }
 
   return {

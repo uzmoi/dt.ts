@@ -1,8 +1,8 @@
 import { modulo } from "@uzmoi/ut/ils";
 import {
   type CalendarDateObject,
-  dayOfYear,
-  daysInMonth,
+  getDayOfYear,
+  getDaysInMonth,
   isLeapYear,
   leapDays,
   type Month,
@@ -25,8 +25,8 @@ export const Weekday: Record<WeekdayStringShort, Weekday> = {
 
 export const weekStartDefault: Weekday = Weekday.Sun;
 
-export const dayOfWeek = (date: CalendarDateObject): Weekday => {
-  const d = date.year + leapDays(date.year - 1) + dayOfYear(date) - 1;
+export const getDayOfWeek = (date: CalendarDateObject): Weekday => {
+  const d = date.year + leapDays(date.year - 1) + getDayOfYear(date) - 1;
   return (d % DAYS_IN_WEEK) as Weekday;
 };
 
@@ -43,17 +43,17 @@ const weekDayStringArray = [
 export type WeekdayStringLong = `${(typeof weekDayStringArray)[number]}day`;
 export type WeekdayStringShort = Head3<WeekdayStringLong>;
 
-export const weekdayStringLong = (date: Weekday): WeekdayStringLong => {
+export const getWeekdayStringLong = (date: Weekday): WeekdayStringLong => {
   return `${weekDayStringArray[date]}day`;
 };
 
-export const weekdayStringShort = (date: Weekday): WeekdayStringShort => {
+export const getWeekdayStringShort = (date: Weekday): WeekdayStringShort => {
   return weekDayStringArray[date].slice(0, 3) as WeekdayStringShort;
 };
 
 export type WeeksInYear = 53 | 54;
 
-export const weeksInYear = (
+export const getWeeksInYear = (
   year: number,
   weekStart: Weekday = weekStartDefault,
 ): WeeksInYear => {
@@ -79,7 +79,7 @@ export type WeekOfYear =
 /**
  * @returns 1..54
  */
-export const weekOfYear = (
+export const getWeekOfYear = (
   date: CalendarDateObject,
   weekStart: Weekday = weekStartDefault,
 ): WeekOfYear => {
@@ -88,28 +88,28 @@ export const weekOfYear = (
     DAYS_IN_WEEK;
 
   // 初週のうち前年の日数 + 今年の日数
-  const days = daysInPreviousYear + dayOfYear(date);
+  const days = daysInPreviousYear + getDayOfYear(date);
   return Math.ceil(days / DAYS_IN_WEEK) as WeekOfMonth;
 };
 
 export type WeeksInMonth = 4 | 5 | 6;
 
-export const weeksInMonth = (
+export const getWeeksInMonth = (
   year: number,
   month: Month,
   weekStart?: Weekday,
 ): WeeksInMonth => {
-  const day = daysInMonth(year, month);
-  return weekOfMonth({ year, month, day }, weekStart) as WeeksInMonth;
+  const day = getDaysInMonth(year, month);
+  return getWeekOfMonth({ year, month, day }, weekStart) as WeeksInMonth;
 };
 
 export type WeekOfMonth = 1 | 2 | 3 | 4 | 5 | 6;
 
-export const weekOfMonth = (
+export const getWeekOfMonth = (
   date: CalendarDateObject,
   weekStart: Weekday = weekStartDefault,
 ): WeekOfMonth => {
-  const weekday = dayOfWeek(date);
+  const weekday = getDayOfWeek(date);
 
   const daysInPreviousMonth = modulo(
     weekday - date.day - weekStart + 1,

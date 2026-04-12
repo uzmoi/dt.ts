@@ -2,7 +2,7 @@ import { modulo } from "@uzmoi/ut/ils";
 import {
   type CalendarDateObject,
   type DayOfMonth,
-  dayOfYear,
+  getDayOfYear,
   isLeapYear,
   type Month,
   normalizeCalendarDate,
@@ -19,11 +19,11 @@ import {
 } from "./time.ts";
 import {
   DAYS_IN_WEEK,
-  dayOfWeek,
+  getDayOfWeek,
+  getWeekOfMonth,
+  getWeekOfYear,
   type Weekday,
   type WeekOfMonth,
-  weekOfMonth,
-  weekOfYear,
 } from "./week.ts";
 
 export const normalizeTimeObject = (
@@ -191,26 +191,26 @@ export class DateTime implements OffsetDateTimeObject {
    * @returns 1..53
    */
   weekOfYear(weekStart: Weekday): number {
-    return weekOfYear(this, weekStart);
+    return getWeekOfYear(this, weekStart);
   }
   /**
    * @returns 1..6
    */
   weekOfMonth(weekStart: Weekday): WeekOfMonth {
-    return weekOfMonth(this, weekStart);
+    return getWeekOfMonth(this, weekStart);
   }
   /**
    * ordinal day
    * @returns 1..366
    */
   dayOfYear(): number {
-    return dayOfYear(this);
+    return getDayOfYear(this);
   }
   /**
    * week day
    */
   dayOfWeek(): Weekday {
-    return dayOfWeek(this);
+    return getDayOfWeek(this);
   }
 
   /**

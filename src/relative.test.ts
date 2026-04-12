@@ -2,8 +2,8 @@ import { describe, expect, test } from "vitest";
 import {
   type CalendarDateObject,
   type DayOfMonth,
-  daysInMonth,
-  daysInYear,
+  getDaysInMonth,
+  getDaysInYear,
 } from "./date.ts";
 import { daysBetween } from "./relative.ts";
 
@@ -33,9 +33,9 @@ describe("daysBetween", () => {
     const end: CalendarDateObject = { year: 2025, month: 2, day: 2 };
     expect(daysBetween(start, end)).toBe(
       // biome-ignore format: 可読性
-      + daysInMonth(2023, 12) - 7
-      + daysInYear(2024)
-      + daysInMonth(2025, 1) + 2,
+      + getDaysInMonth(2023, 12) - 7
+      + getDaysInYear(2024)
+      + getDaysInMonth(2025, 1) + 2,
     );
   });
 });

@@ -1,4 +1,4 @@
-import { daysInMonth, MONTHS_IN_YEAR, type Month } from "./date.ts";
+import { getDaysInMonth, MONTHS_IN_YEAR, type Month } from "./date.ts";
 import {
   DateTime,
   type DateTimeLike,
@@ -41,7 +41,7 @@ export class Interval {
 
     const daysInCurrentMonth = () => {
       const m = start.month + months;
-      return daysInMonth(
+      return getDaysInMonth(
         start.year + Math.floor(m / MONTHS_IN_YEAR),
         (m % MONTHS_IN_YEAR || MONTHS_IN_YEAR) as Month,
       );
