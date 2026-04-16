@@ -14,6 +14,8 @@
 [test-badge]: https://img.shields.io/github/actions/workflow/status/uzmoi/dt.ts/test.yml?style=flat-square&label=Test
 [codecov-badge]: https://img.shields.io/codecov/c/gh/uzmoi/dt.ts?style=flat-square
 
+A date and time library designed independently of the "Date".
+
 ```ts
 import { DateTime } from "@uzmoi/dt";
 ```
