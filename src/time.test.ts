@@ -1,9 +1,40 @@
 import { describe, expect, test } from "vitest";
 import { Time } from "./time.ts";
 
-test("parse", () => {
-  const time = Time.parse("02:04:08.016");
-  expect(time?.toString()).toStrictEqual("02:04:08.016");
+describe("parse", () => {
+  test.each([
+    ["00:00:00", new Time()],
+    ["02:59:59", new Time(2, 59, 59)],
+    ["23:59:60", new Time(23, 59, 60)],
+  ])("Parse '%s'", (string, time) => {
+    expect(Time.parse(string)).toStrictEqual(time);
+  });
+
+  test("parse", () => {
+    expect(Time.parse("02:04:08")).toStrictEqual(new Time(2, 4, 8, 0));
+  });
+
+  test("millisecond", () => {
+    test("parse", () => {
+      expect(Time.parse("02:04:08.016")).toStrictEqual(new Time(2, 4, 8, 16));
+    });
+
+    test("parse", () => {
+      expect(Time.parse("02:04:08.16")).toStrictEqual(new Time(2, 4, 8, 160));
+    });
+
+    test("microsecond", () => {
+      expect(Time.parse("02:04:08.00016")).toStrictEqual(
+        new Time(2, 4, 8, 0.16),
+      );
+    });
+  });
+
+  describe("Invalid inputs", () => {
+    test("empty", () => {
+      expect(Time.parse("")).toBe(null);
+    });
+  });
 });
 
 describe("toString", () => {

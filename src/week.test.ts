@@ -1,7 +1,8 @@
 import { fc, test } from "@fast-check/vitest";
-import * as dateFns from "date-fns";
 import { describe, expect } from "vitest";
-import { type DayOfMonth, isLeapYear, type Month } from "./date.ts";
+import * as vremel from "vremel";
+import { plainDate } from "../tests/fixtures/fast-check-helpers.ts";
+import { isLeapYear, type Month } from "./date.ts";
 import {
   getDayOfWeek,
   getShortWeekdayName,
@@ -13,19 +14,9 @@ import {
   Weekday,
 } from "./week.ts";
 
-const dateArbitrary = fc.date({
-  min: new Date("1970-01-01T00:00:00Z"),
-  max: new Date("9999-12-31T23:59:59Z"),
-  noInvalidDate: true,
-});
-
 describe("getDayOfWeek", () => {
-  test.prop([dateArbitrary])("fuzz", date => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1) as Month;
-    const day = date.getDate() as DayOfMonth;
-
-    expect(getDayOfWeek({ year, month, day })).toBe(date.getDay());
+  test.prop([plainDate()])("fuzz", date => {
+    expect(getDayOfWeek(date)).toBe(date.dayOfWeek);
   });
 });
 
@@ -35,8 +26,18 @@ describe("getWeekdayName / getShortWeekdayName", () => {
   });
 
   test.each(Object.entries(Weekday))("long %s", (_, weekday) => {
+    const formatter = Intl.DateTimeFormat("en", { weekday: "long" });
+
+    const date = vremel.withDayOfWeek(
+      Temporal.Now.plainDateISO(),
+      weekday || 7,
+      { firstDayOfWeek: 7 },
+    );
+
     expect(getWeekdayName(weekday)).toBe(
-      dateFns.format(dateFns.setDay(new Date(), weekday), "EEEE"),
+      // biome-ignore lint/style/noNonNullAssertion: 見つからないならテスト落ちてくれ。
+      formatter.formatToParts(date).find(part => part.type === "weekday")!
+        .value,
     );
   });
 });
@@ -74,25 +75,19 @@ describe("getWeekOfYear", () => {
     expect(getWeekOfYear({ year: 2023, month: 1, day: 7 })).toBe(1);
     expect(getWeekOfYear({ year: 2023, month: 1, day: 8 })).toBe(2);
   });
+
   test("weekStart", () => {
     expect(getWeekOfYear({ year: 2023, month: 1, day: 2 }, Weekday.Mon)).toBe(
       2,
     );
   });
 
-  test.prop([dateArbitrary, fc.integer({ min: 0, max: 6 })])(
+  test.prop([plainDate(), fc.integer({ min: 0, max: 6 })])(
     "fuzz",
     (date, weekStart) => {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1) as Month;
-      const day = date.getDate() as DayOfMonth;
+      expect.assert(date.yearOfWeek === date.year);
 
-      expect(getWeekOfYear({ year, month, day }, weekStart as Weekday)).toBe(
-        dateFns.eachWeekOfInterval(
-          { start: dateFns.startOfYear(date), end: date },
-          { weekStartsOn: weekStart as Weekday },
-        ).length,
-      );
+      expect(getWeekOfYear(date, weekStart as Weekday)).toBe(date.weekOfYear);
     },
   );
 });
@@ -115,15 +110,21 @@ describe("getWeeksInMonth", () => {
     expect(getWeeksInMonth(year, month, weekStart)).toBe(expected);
   });
 
-  test.prop([dateArbitrary, fc.integer({ min: 0, max: 6 })])(
+  test.prop([plainDate(), fc.integer({ min: 0, max: 6 })])(
     "fuzz",
     (date, weekStart) => {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1) as Month;
+      const start = vremel.startOfWeek(vremel.startOfMonth(date), {
+        firstDayOfWeek: weekStart || 7,
+      });
+      const end = vremel
+        .startOfWeek(vremel.startOfMonth(date).add({ months: 1 }), {
+          firstDayOfWeek: weekStart || 7,
+        })
+        .add({ weeks: 1 });
 
-      expect(getWeeksInMonth(year, month, weekStart as Weekday)).toBe(
-        dateFns.getWeeksInMonth(date, { weekStartsOn: weekStart as Weekday }),
-      );
+      expect(
+        getWeeksInMonth(date.year, date.month as Month, weekStart as Weekday),
+      ).toBe(start.until(end).days / 7);
     },
   );
 });
@@ -133,28 +134,34 @@ describe("getWeekOfMonth", () => {
     test("7日は1", () => {
       expect(getWeekOfMonth({ year: 2023, month: 1, day: 7 })).toBe(1);
     });
+
     test("8日は2", () => {
       expect(getWeekOfMonth({ year: 2023, month: 1, day: 8 })).toBe(2);
     });
   });
+
   describe("2日に週が始まる場合", () => {
     test("1日は1", () => {
       expect(getWeekOfMonth({ year: 2023, month: 4, day: 1 })).toBe(1);
     });
+
     test("2日は2", () => {
       expect(getWeekOfMonth({ year: 2023, month: 4, day: 2 })).toBe(2);
     });
   });
 
-  test.prop([dateArbitrary, fc.integer({ min: 0, max: 6 })])(
+  test.prop([plainDate(), fc.integer({ min: 0, max: 6 })])(
     "fuzz",
     (date, weekStart) => {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1) as Month;
-      const day = date.getDate() as DayOfMonth;
+      const start = vremel.startOfWeek(vremel.startOfMonth(date), {
+        firstDayOfWeek: weekStart || 7,
+      });
+      const end = vremel
+        .startOfWeek(date, { firstDayOfWeek: weekStart || 7 })
+        .add({ weeks: 1 });
 
-      expect(getWeekOfMonth({ year, month, day }, weekStart as Weekday)).toBe(
-        dateFns.getWeekOfMonth(date, { weekStartsOn: weekStart as Weekday }),
+      expect(getWeekOfMonth(date, weekStart as Weekday)).toBe(
+        start.until(end).days / 7,
       );
     },
   );

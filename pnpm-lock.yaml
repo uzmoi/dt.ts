@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  vremel:
+    hash: d6d872690cf10ca6499ef238c98774f0b5437d237b41a2b7164ab31a98a20e78
+    path: patches/vremel.patch
+
 importers:
 
   .:
@@ -30,12 +35,12 @@ importers:
       '@vitest/ui':
         specifier: ^4.0.18
         version: 4.0.18(vitest@4.0.18)
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
       lefthook:
         specifier: ^2.1.1
         version: 2.1.1
+      temporal-polyfill-lite:
+        specifier: ^0.3.3
+        version: 0.3.3
       tsdown:
         specifier: ^0.20.3
         version: 0.20.3(typescript@6.0.2)
@@ -45,6 +50,9 @@ importers:
       vitest:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@25.3.1)(@vitest/ui@4.0.18)
+      vremel:
+        specifier: ^0.6.2
+        version: 0.6.2(patch_hash=d6d872690cf10ca6499ef238c98774f0b5437d237b41a2b7164ab31a98a20e78)
 
 packages:
 
@@ -282,6 +290,9 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@date-fns/utc@2.1.1':
+    resolution: {integrity: sha512-SlJDfG6RPeEX8wEVv6ZB3kak4MmbtyiI2qX/5zuKdordbrhB/iaJ58GVMZgJ6P1sJaM1gMgENFYYeg1JWrCFrA==}
 
   '@emnapi/core@1.8.1':
     resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
@@ -1105,9 +1116,6 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  date-fns@4.1.0:
-    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
-
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
     engines: {node: '>=6.0'}
@@ -1619,6 +1627,9 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
+  temporal-polyfill-lite@0.3.3:
+    resolution: {integrity: sha512-GscNolr0P/+tVwK2UIsmOGdCPfMXMMdQsvFHERLKn1IUOJEyc8mNXVwFtXkM+n/Z7NEaLrB7Y/lVK3hY8/ioXA==}
+
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
@@ -1789,6 +1800,10 @@ packages:
         optional: true
       jsdom:
         optional: true
+
+  vremel@0.6.2:
+    resolution: {integrity: sha512-fpaNiS0ig0GdVRQqZlIpZQRKisVE5ZPFUU+fxH+CqZaGhAnYR3fW9r+rE5NEmBNSqTBahUzwl8ALoy3Bw1Z5Jg==}
+    engines: {node: '>=18'}
 
   weapon-regex@1.3.6:
     resolution: {integrity: sha512-wsf1m1jmMrso5nhwVFJJHSubEBf3+pereGd7+nBKtYJ18KoB/PWJOHS3WRkwS04VrOU0iJr2bZU+l1QaTJ+9nA==}
@@ -2089,6 +2104,8 @@ snapshots:
 
   '@biomejs/cli-win32-x64@2.4.4':
     optional: true
+
+  '@date-fns/utc@2.1.1': {}
 
   '@emnapi/core@1.8.1':
     dependencies:
@@ -2739,8 +2756,6 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  date-fns@4.1.0: {}
-
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
@@ -3245,6 +3260,8 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
+  temporal-polyfill-lite@0.3.3: {}
+
   tinybench@2.9.0: {}
 
   tinyexec@1.0.2: {}
@@ -3374,6 +3391,10 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  vremel@0.6.2(patch_hash=d6d872690cf10ca6499ef238c98774f0b5437d237b41a2b7164ab31a98a20e78):
+    dependencies:
+      '@date-fns/utc': 2.1.1
 
   weapon-regex@1.3.6: {}
 

@@ -1,24 +1,17 @@
 import { fc, test } from "@fast-check/vitest";
-import * as dateFns from "date-fns";
 import { describe, expect } from "vitest";
+import * as vremel from "vremel";
+import { plainDate } from "../tests/fixtures/fast-check-helpers.ts";
 import {
   type CalendarDateObject,
-  type DayOfMonth,
   formatDate,
   getDayOfYear,
   getDaysInMonth,
   getMonthOfOrdinalDay,
+  isLeapYear,
   type Month,
   normalizeCalendarDate,
 } from "./date.ts";
-
-fc.configureGlobal({ seed: 12345678 });
-
-const dateArbitrary = fc.date({
-  min: new Date("1970-01-01T00:00:00Z"),
-  max: new Date("9999-12-31T23:59:59Z"),
-  noInvalidDate: true,
-});
 
 describe("formatDate", () => {
   test("basic", () => {
@@ -52,57 +45,66 @@ describe("getMonthOfOrdinalDay", () => {
     expect(getMonthOfOrdinalDay(2024, day)).toBe(month);
   });
 
-  test.prop([dateArbitrary])("fuzz", date => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1) as Month;
+  test.prop([plainDate()])("fuzz", date => {
+    const day = vremel.startOfYear(date).until(date).days + 1;
 
-    expect(getMonthOfOrdinalDay(year, dateFns.getDayOfYear(date))).toBe(month);
+    expect(getMonthOfOrdinalDay(date.year, day)).toBe(date.month);
   });
 });
 
 describe("getDayOfYear", () => {
-  test("getDayOfYear 1", () => {
+  test("１月１日は 1", () => {
     expect(getDayOfYear({ year: 2026, month: 1, day: 1 })).toBe(1);
   });
 
-  test("getDayOfYear 365", () => {
-    expect(getDayOfYear({ year: 2026, month: 12, day: 31 })).toBe(365);
+  test("平年の12月31日は 365", () => {
+    const year = 2026;
+    expect.assert(!isLeapYear(year));
+    expect(getDayOfYear({ year, month: 12, day: 31 })).toBe(365);
   });
 
-  test.prop([dateArbitrary])("fuzz", date => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1) as Month;
-    const day = date.getDate() as DayOfMonth;
+  test("閏年の12月31日は 366", () => {
+    const year = 2028;
+    expect.assert(isLeapYear(year));
+    expect(getDayOfYear({ year, month: 12, day: 31 })).toBe(366);
+  });
 
-    expect(getDayOfYear({ year, month, day })).toBe(dateFns.getDayOfYear(date));
+  test.prop([plainDate()])("fuzz", date => {
+    const day = vremel.startOfYear(date).until(date).days + 1;
+
+    expect(getDayOfYear(date)).toBe(day);
   });
 });
 
 describe("getDaysInMonth", () => {
-  test.prop([dateArbitrary])("fuzz", date => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1) as Month;
+  test.each([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  ] as const)("平年の%d月", month => {
+    const { year, daysInMonth } = new Temporal.PlainYearMonth(2026, month);
 
-    expect(getDaysInMonth(year, month)).toBe(dateFns.getDaysInMonth(date));
+    expect(getDaysInMonth(year, month)).toBe(daysInMonth);
+  });
+
+  test("閏年の2月", () => {
+    const month = 2;
+    const { year, daysInMonth } = new Temporal.PlainYearMonth(2028, month);
+
+    expect(getDaysInMonth(year, month)).toBe(daysInMonth);
   });
 });
 
 describe("normalizeCalendarDate", () => {
-  test.prop([fc.integer({ min: 1970, max: 9999 }), fc.integer(), fc.integer()])(
-    "fuzz",
-    (year, month, day) => {
-      const date = new Date();
-      date.setFullYear(year);
-      date.setMonth(month - 1);
-      date.setDate(day);
+  test.prop([
+    plainDate({ max: 9000 }),
+    fc.integer({ min: -1000, max: 1000 }),
+    fc.integer({ min: -1000, max: 1000 }),
+  ])("fuzz", (date, months, days) => {
+    const { year, month, day } = date.add({ months }).add({ days });
 
-      fc.pre(!Number.isNaN(date.getTime()));
+    fc.pre(1970 < year && year < 9999);
 
-      expect(normalizeCalendarDate(year, month, day)).toEqual({
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate(),
-      });
-    },
-  );
+    expect(
+      normalizeCalendarDate(date.year, date.month + months, date.day + days),
+    ).toEqual({ year, month, day });
+  });
 });

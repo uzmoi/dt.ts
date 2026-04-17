@@ -1,0 +1,12 @@
+diff --git a/dist/types.d.ts b/dist/types.d.ts
+index af50ea0aa8b7374630327a47d0fe655fcd3a5bd5..690abf3513c46710f19bd43eea494eae7c90123e 100644
+--- a/dist/types.d.ts
++++ b/dist/types.d.ts
+@@ -1,5 +1,5 @@
+-import type { Temporal } from "./temporal.d.ts";
+-export type { Temporal };
++import Temporal_ = Temporal;
++export type { Temporal_ as Temporal };
+ /**
+  * `Date` or extended `Date`
+  */

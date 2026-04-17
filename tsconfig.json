@@ -12,6 +12,7 @@
     "isolatedDeclarations": true,
 
     "lib": ["ES2017"],
+    "types": ["temporal-polyfill-lite/types/global"],
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,

@@ -4,5 +4,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "cSpell.words": ["datetime", "emnorst", "millis", "tsup", "treeshake", "iife"]
+  "[toml]": {
+    "editor.defaultFormatter": "tombi-toml.tombi"
+  },
+  "cSpell.words": ["datetime", "IXDTF", "treeshake", "uzmoi", "vremel"]
 }
