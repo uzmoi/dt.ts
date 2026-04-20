@@ -1,10 +1,11 @@
 import { formatInt } from "./string/utils.ts";
+import type { Strict } from "./types.ts";
 import type { Weekday, WeekOfMonth, WeekOfYear } from "./week.ts";
 
 export interface CalendarDateObject {
   year: number;
-  month: Month;
-  day: DayOfMonth;
+  month: Month | (number & {});
+  day: DayOfMonth | (number & {});
 }
 
 export interface OrdinalDateObject {
@@ -15,16 +16,16 @@ export interface OrdinalDateObject {
 
 export interface CalendarWeekDateObject {
   year: number;
-  month: Month;
+  month: Month | (number & {});
   /** 1..6 */
-  week: WeekOfMonth;
+  week: WeekOfMonth | (number & {});
   weekday: Weekday;
 }
 
 export interface OrdinalWeekDateObject {
   year: number;
   /** 1..54 */
-  week: WeekOfYear;
+  week: WeekOfYear | (number & {});
   weekday: Weekday;
 }
 
@@ -135,7 +136,7 @@ export const normalizeCalendarDate = (
   year: number,
   month: number,
   day: number,
-): CalendarDateObject => {
+): Strict<CalendarDateObject> => {
   year += Math.floor((month - 1) / MONTHS_IN_YEAR);
   month %= MONTHS_IN_YEAR;
   if (month <= 0) month += MONTHS_IN_YEAR;

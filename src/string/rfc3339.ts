@@ -9,10 +9,14 @@ import type { OffsetDateTimeObject } from "../datetime.ts";
 import {
   formatTime,
   HOURS_IN_DAY,
+  type Hour,
   MILLISECONDS_IN_SECOND,
   MINUTES_IN_HOUR,
+  type Minute,
   SECONDS_IN_MINUTE,
+  type Second,
 } from "../time.ts";
+import type { Strict } from "../types.ts";
 import { formatOffset, parseOffset } from "./offset.ts";
 
 // https://www.rfc-editor.org/info/rfc3339
@@ -32,7 +36,9 @@ type RFC3339RegExpExecArray = [
   offset: string,
 ];
 
-export const parseRFC3339 = (dt: string): OffsetDateTimeObject | null => {
+export const parseRFC3339 = (
+  dt: string,
+): Strict<OffsetDateTimeObject> | null => {
   const matchResult = RFC3339RegExp.exec(dt) as RFC3339RegExpExecArray | null;
   if (matchResult == null) return null;
 
@@ -78,9 +84,9 @@ export const parseRFC3339 = (dt: string): OffsetDateTimeObject | null => {
     year,
     month: month as Month,
     day: day as DayOfMonth,
-    hour,
-    minute,
-    second,
+    hour: hour as Hour,
+    minute: minute as Minute,
+    second: second as Second,
     millisecond,
     offset,
   };

@@ -1,4 +1,5 @@
 import { formatInt } from "./string/utils.ts";
+import type { Strict } from "./types.ts";
 
 export const HOURS_IN_DAY = 24;
 export const MINUTES_IN_HOUR = 60;
@@ -6,11 +7,35 @@ export const SECONDS_IN_MINUTE = 60;
 export const MILLISECONDS_IN_SECOND = 1000;
 
 export interface TimeObject {
-  hour: number;
-  minute: number;
-  second: number;
+  hour: Hour | (number & {});
+  minute: Minute | (number & {});
+  second: Second | (number & {});
   millisecond: number;
 }
+
+// biome-ignore format: table
+export type Hour =
+  | ( 0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11)
+  | (12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23);
+
+// biome-ignore format: table
+export type Minute =
+  | ( 0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9)
+  | (10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19)
+  | (20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29)
+  | (30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39)
+  | (40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49)
+  | (50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59);
+
+// biome-ignore format: table
+export type Second =
+  | ( 0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9)
+  | (10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19)
+  | (20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29)
+  | (30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39)
+  | (40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49)
+  | (50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59)
+  | 60; // <- leap second
 
 export const timeToMilliseconds = (time: TimeObject): number => {
   const minutes = time.hour * MINUTES_IN_HOUR + time.minute;
@@ -32,7 +57,7 @@ export const formatTime = (
 
 const timeRe = /^(\d\d):(\d\d):(\d\d)(?:\.(\d+))?$/;
 
-export class Time implements TimeObject {
+export class Time implements Strict<TimeObject> {
   static parse(time: string): Time | null {
     const result = timeRe.exec(time);
     if (result == null) return null;
@@ -41,13 +66,13 @@ export class Time implements TimeObject {
   }
 
   constructor(
-    readonly hour = 0,
-    readonly minute = 0,
-    readonly second = 0,
+    readonly hour: Hour = 0,
+    readonly minute: Minute = 0,
+    readonly second: Second = 0,
     readonly millisecond = 0,
   ) {}
 
-  with(time: Partial<TimeObject>): Time {
+  with(time: Partial<Strict<TimeObject>>): Time {
     return new Time(
       time.hour ?? this.hour,
       time.minute ?? this.minute,

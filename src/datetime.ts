@@ -12,11 +12,16 @@ import { NativeDate } from "./native-date.ts";
 import { formatRFC3339, parseRFC3339 } from "./string/rfc3339.ts";
 import {
   HOURS_IN_DAY,
+  type Hour,
   MILLISECONDS_IN_SECOND,
   MINUTES_IN_HOUR,
+  type Minute,
   SECONDS_IN_MINUTE,
+  type Second,
+  type Time,
   type TimeObject,
 } from "./time.ts";
+import type { Strict } from "./types.ts";
 import {
   DAYS_IN_WEEK,
   getDayOfWeek,
@@ -28,16 +33,16 @@ import {
 
 export const normalizeTimeObject = (
   time: TimeObject,
-): TimeObject & { day: number } => {
+): Strict<TimeObject> & { day: number } => {
   const millisecond = time.millisecond;
   const second = time.second + Math.floor(millisecond / MILLISECONDS_IN_SECOND);
   const minute = time.minute + Math.floor(second / SECONDS_IN_MINUTE);
   const hour = time.hour + Math.floor(minute / MINUTES_IN_HOUR);
   return {
     day: Math.floor(hour / HOURS_IN_DAY),
-    hour: modulo(hour, HOURS_IN_DAY),
-    minute: modulo(minute, MINUTES_IN_HOUR),
-    second: modulo(second, SECONDS_IN_MINUTE),
+    hour: modulo(hour, HOURS_IN_DAY) as Hour,
+    minute: modulo(minute, MINUTES_IN_HOUR) as Minute,
+    second: modulo(second, SECONDS_IN_MINUTE) as Second,
     millisecond: modulo(millisecond, MILLISECONDS_IN_SECOND),
   };
 };
@@ -108,7 +113,7 @@ export const dateTimeUnits: readonly (keyof DateTimeObject)[] = [
   "millisecond",
 ] as const;
 
-export class DateTime implements OffsetDateTimeObject {
+export class DateTime implements Strict<OffsetDateTimeObject>, Time {
   static now(): DateTime {
     return DateTime.fromMillis(NativeDate.now());
   }
@@ -134,9 +139,9 @@ export class DateTime implements OffsetDateTimeObject {
       nativeDate.getUTCFullYear(),
       (nativeDate.getUTCMonth() + 1) as Month,
       nativeDate.getUTCDate() as DayOfMonth,
-      nativeDate.getUTCHours(),
-      nativeDate.getUTCMinutes(),
-      nativeDate.getUTCSeconds(),
+      nativeDate.getUTCHours() as Hour,
+      nativeDate.getUTCMinutes() as Minute,
+      nativeDate.getUTCSeconds() as Second,
       nativeDate.getUTCMilliseconds(),
       0,
     );
@@ -176,9 +181,9 @@ export class DateTime implements OffsetDateTimeObject {
     readonly year: number,
     readonly month: Month,
     readonly day: DayOfMonth,
-    readonly hour: number,
-    readonly minute: number,
-    readonly second: number,
+    readonly hour: Hour,
+    readonly minute: Minute,
+    readonly second: Second,
     readonly millisecond: number,
     readonly offset = 0,
   ) {}
@@ -263,8 +268,7 @@ export class DateTime implements OffsetDateTimeObject {
   startOf(this: DateTime, key: DurationUnit): DateTime {
     const dt: Partial<DateTimeObject> = { millisecond: 0 };
     if (key === "week") {
-      // @ts-expect-error with で normalize されるので安全
-      dt.day = this.day - this.dayOfWeek();
+      dt.day = this.day - getDayOfWeek(this);
       key = "day";
     }
     // biome-ignore lint/suspicious/noConfusingLabels: 他にどうしろってんだ。
