@@ -55,14 +55,26 @@ export const formatTime = (
   ].join(format === "basic" ? "" : ":");
 };
 
-const timeRe = /^(\d\d):(\d\d):(\d\d)(?:\.(\d+))?$/;
+const TimeRegExp = /^(\d\d):(\d\d):(\d\d)(\.\d+)?$/;
+type TimeRegExpExecArray = [
+  match: string,
+  hour: string,
+  minute: string,
+  second: string,
+  second_fraction: string | undefined,
+];
 
 export class Time implements Strict<TimeObject> {
   static parse(time: string): Time | null {
-    const result = timeRe.exec(time);
+    const result = TimeRegExp.exec(time) as TimeRegExpExecArray | null;
     if (result == null) return null;
-    // biome-ignore lint/style/noNonNullAssertion: timeReから自明
-    return new Time(+result[1]!, +result[2]!, +result[3]!, +result[4]!);
+    // FIXME: as が嘘。
+    return new Time(
+      +result[1] as Hour,
+      +result[2] as Minute,
+      +result[3] as Second,
+      +(result[4] || 0) * 1000,
+    );
   }
 
   constructor(

@@ -10,16 +10,12 @@ describe("parse", () => {
     expect(Time.parse(string)).toStrictEqual(time);
   });
 
-  test("parse", () => {
-    expect(Time.parse("02:04:08")).toStrictEqual(new Time(2, 4, 8, 0));
-  });
-
-  test("millisecond", () => {
-    test("parse", () => {
+  describe("millisecond", () => {
+    test("full", () => {
       expect(Time.parse("02:04:08.016")).toStrictEqual(new Time(2, 4, 8, 16));
     });
 
-    test("parse", () => {
+    test("omitted", () => {
       expect(Time.parse("02:04:08.16")).toStrictEqual(new Time(2, 4, 8, 160));
     });
 
