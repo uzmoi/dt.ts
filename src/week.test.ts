@@ -117,7 +117,7 @@ describe("getWeeksInMonth", () => {
         firstDayOfWeek: weekStart || 7,
       });
       const end = vremel
-        .startOfWeek(vremel.startOfMonth(date).add({ months: 1 }), {
+        .startOfWeek(vremel.endOfMonth(date), {
           firstDayOfWeek: weekStart || 7,
         })
         .add({ weeks: 1 });
