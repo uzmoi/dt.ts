@@ -84,4 +84,12 @@ export class Time implements Strict<TimeObject> {
   toString(format?: "extended" | "basic"): string {
     return formatTime(this, format);
   }
+
+  toJSON(): string {
+    return this.toString();
+  }
+
+  valueOf(): number {
+    return timeToMilliseconds(this);
+  }
 }

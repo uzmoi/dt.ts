@@ -1,3 +1,4 @@
+import { todo } from "@uzmoi/ut/ils";
 import { getDaysInMonth, MONTHS_IN_YEAR, type Month } from "./date.ts";
 import {
   DateTime,
@@ -25,6 +26,18 @@ export class Interval {
     readonly start: DateTime,
     readonly end: DateTime,
   ) {}
+
+  toString(): string {
+    return `${this.start}/${this.end}`;
+  }
+
+  toJSON(): string {
+    return this.toString();
+  }
+
+  valueOf(): never {
+    throw new Error(todo());
+  }
 
   toDuration(): DurationObject {
     const { start, end } = this;
